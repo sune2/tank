@@ -1,0 +1,24 @@
+{
+  "name": "tank",
+  "version": "1.0.0",
+  "description": "tank battle",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.13.0",
+    "socket.io": "^1.3.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sune2/tank.git"
+  },
+  "author": "Tamura Kazunori",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sune2/tank/issues"
+  },
+  "homepage": "https://github.com/sune2/tank#readme"
+}
