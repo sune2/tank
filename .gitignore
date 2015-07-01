@@ -1,0 +1,4 @@
+*.el
+.tern*
+.DS_Store
+node_modules
