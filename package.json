@@ -9,6 +9,7 @@
   },
   "devDependencies": {},
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,9 +17,12 @@
     "url": "git+https://github.com/sune2/tank.git"
   },
   "author": "Tamura Kazunori",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/sune2/tank/issues"
   },
-  "homepage": "https://github.com/sune2/tank#readme"
+  "homepage": "https://github.com/sune2/tank#readme",
+  "engines": {
+    "node": "0.12.3",
+    "npm":  "2.9.1"
+  }
 }
