@@ -25,7 +25,6 @@ define(['js/Enemy'], function(Enemy) {
   };
 
   EnemyManager.prototype.move = function(id, enemyData) {
-    console.log('move : ' + id);
     var enemy = this.enemies[id];
     enemy.x = enemyData.x;
     enemy.y = enemyData.y;
