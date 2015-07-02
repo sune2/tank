@@ -1,4 +1,5 @@
 enchant();
+enchant.Event.MOVED_OR_ROTATED = 'movedorrotated';
 
 require(
   ['js/Player'],
@@ -19,6 +20,11 @@ require(
         var scene = new enchant.Scene();
         var player = new Player(game);
         scene.addChild(player);
+
+        player.on(enchant.Event.MOVED_OR_ROTATED, function() {
+          socket.emit('tank', {position: {x: player.x, y: player.y}, rotation: player.rotation});
+        });
+
         scene.backgroundColor = '#ffa';
         game.pushScene(scene);
       };

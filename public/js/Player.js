@@ -20,6 +20,10 @@ define(['js/Vector'], function(Vector) {
           var diff = direction.multiply(3);
           player.moveBy(diff.x, diff.y);
         }
+
+        if (game.input.right || game.input.left || game.input.up) {
+          player.dispatchEvent(new enchant.Event(enchant.Event.MOVED_OR_ROTATED));
+        }
       });
     }
   });
