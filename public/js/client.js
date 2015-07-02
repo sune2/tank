@@ -18,6 +18,9 @@ require(
         scene.backgroundColor = '#ffa';
         game.pushScene(scene);
 
+        var enemyManager = new EnemyManager(game, scene);
+        enemyManager.setSocketListeners(socket);
+
         var player = new Player(game);
         scene.addChild(player);
 
@@ -26,8 +29,6 @@ require(
           socket.emit('tankMoved', {x: player.x, y: player.y, rotation: player.rotation});
         });
 
-        var enemyManager = new EnemyManager(game, scene);
-        enemyManager.setSocketListeners(socket);
       };
       game.start();
     });
