@@ -5,6 +5,34 @@ var express = require('express'),
 
 app.use(express.static('public'));
 
-app.listen(3000, function() {
+/*
+ * 戦車情報
+ - position
+ - rotation
+ - cont....
+ */
+
+var tanks = {};
+
+io.on('connection', function(socket) {
+  console.log('Client connected...');
+  socket.emit('tanks', JSON.stringify(tanks));
+  socket.on('tank', function(tank) {
+    tanks[socket.id] = tank;
+  });
+  socket.on('disconnect', function() {
+    console.log('Disconnected : ' + socket.id);
+    delete tanks[socket.id];
+  });
+});
+
+
+
+
+
+
+
+
+server.listen(3000, function() {
   console.log('Listening on port 3000.');
 });
