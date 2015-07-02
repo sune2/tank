@@ -12,7 +12,7 @@ require(
 
       var game = new enchant.Game(320, 320);
       game.preload('/images/tank.png', '/images/enemy.png');
-
+      game.keybind(32, 'a');
       game.onload = function() {
         var scene = new enchant.Scene();
         scene.backgroundColor = '#ffa';

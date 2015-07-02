@@ -3,12 +3,20 @@ define(['js/Vector'], function(Vector) {
     initialize: function(game) {
       enchant.Sprite.call(this, 22, 32);
       this.image = game.assets['/images/tank.png'];
-      this.x = game.width/2;
-      this.y = game.height/2;
+      this.x = game.width/2 - this.width;
+      this.y = game.height/2 - this.height;
 
       var player = this;
 
+      var previousTime = +new Date();
+
+      var coolingTime = 0;
+
       this.on(enchant.Event.ENTER_FRAME, function() {
+        var currentTime = +new Date();
+        var deltaTime = currentTime - previousTime;
+        previousTime = currentTime;
+
         if (game.input.right) {
           player.rotate(10);
         }
@@ -24,7 +32,15 @@ define(['js/Vector'], function(Vector) {
         if (game.input.right || game.input.left || game.input.up) {
           player.dispatchEvent(new enchant.Event(enchant.Event.MOVED_OR_ROTATED));
         }
+
+        if (coolingTime > 0) {
+          coolingTime -= deltaTime;
+        } else if (game.input.a) {
+          console.log('fire!!');
+          coolingTime = 1000;
+        }
       });
+
     }
   });
   return Player;
