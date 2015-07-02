@@ -27,6 +27,11 @@ define(function() {
   Vector.prototype.multiply = function(k) {
     return new Vector(this.x * k, this.y * k);
   };
+  Vector.prototype.rotate = function(angle) {
+    angle = angle * Math.PI / 180;
+    return new Vector(Math.cos(angle) * this.x - Math.sin(angle) * this.y,
+                      Math.sin(angle) * this.x - Math.cos(angle) * this.y);
+  };
 
   // inner product
   Vector.dot = function(u, v) {
