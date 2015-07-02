@@ -18,7 +18,7 @@ require(
       game.onload = function() {
         var scene = new enchant.Scene();
         var player = new Player(game);
-        scene.addChild(player.sprite);
+        scene.addChild(player);
         scene.backgroundColor = '#ffa';
         game.pushScene(scene);
       };
