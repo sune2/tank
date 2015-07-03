@@ -27,8 +27,13 @@ io.on('connection', function(socket) {
   });
 
   socket.on('tankMoved', function(tank) {
-    tanks[socket.id] = tank;
-    socket.broadcast.emit('tankMoved', socket.id, tank);
+    setTimeout(
+      function() {
+        tanks[socket.id] = tank;
+        socket.broadcast.emit('tankMoved', socket.id, tank);
+        socket.emit('myTankMoved', tank);
+      },150
+    );
   });
 
   socket.on('disconnect', function() {
@@ -38,12 +43,21 @@ io.on('connection', function(socket) {
   });
 
   socket.on('bulletAdded', function(bullet) {
-    socket.broadcast.emit('bulletAdded', bullet);
+    setTimeout(
+      function() {
+        socket.broadcast.emit('bulletAdded', bullet);
+        socket.emit('myBulletAdded', bullet);
+      }, 150
+    );
   });
 
   socket.on('damaged', function(bulletId) {
-    console.log('damaged : ' + socket.id + ' : ' + bulletId);
-    socket.broadcast.emit('bulletRemoved', bulletId);
+    setTimeout(
+      function() {
+        console.log('damaged : ' + socket.id + ' : ' + bulletId);
+        socket.broadcast.emit('bulletRemoved', bulletId);
+      }, 150
+    );
   });
 
 });

@@ -15,6 +15,14 @@ define(['js/Vector', 'js/Segment'], function(Vector, Segment) {
       return new Vector(x, y);
     },
 
+    // for Player
+    getLocalCenter: function() {
+      var x = this.local.x + this.width/2;
+      var y = this.local.y + this.height/2;
+      return new Vector(x, y);
+    },
+
+
     getSegments: function() {
       var ps = [[2, 3], [2, 29], [19, 29], [19, 3]];
       var res = [];

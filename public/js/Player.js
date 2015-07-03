@@ -6,10 +6,23 @@ define(['js/Vector', 'js/Segment', 'js/Tank'], function(Vector, Segment, Tank) {
 
       this.socket = socket;
 
+      // ローカルでの状態
+      this.local = {
+        x: this.x,
+        y: this.y,
+        rotation: this.rotation
+      };
+
       var player = this;
 
       var previousTime = +new Date();
       var coolingTime = 0;
+
+      socket.on('myTankMoved', function(tank) {
+        player.x = tank.x;
+        player.y = tank.y;
+        player.rotation = tank.rotation;
+      });
 
       this.on(enchant.Event.ENTER_FRAME, function() {
         var currentTime = +new Date();
@@ -17,34 +30,38 @@ define(['js/Vector', 'js/Segment', 'js/Tank'], function(Vector, Segment, Tank) {
         previousTime = currentTime;
 
         var moveOrRotated = false;
+
         if (game.input.right) {
-          player.rotate(200 * deltaTime);
+          player.local.rotation += 200 * deltaTime;
           moveOrRotated = true;
         }
-        if (game.input.left){
-          player.rotate(-200 * deltaTime);
+        if (game.input.left) {
+          player.local.rotation -= 200 * deltaTime;
           moveOrRotated = true;
         }
         if (game.input.up) {
-          var direction = Vector.unit(player.rotation-90);
+          var direction = Vector.unit(player.local.rotation-90);
           var diff = direction.multiply(100 * deltaTime);
           if (player.canMove(diff)) {
-            player.moveBy(diff.x, diff.y);
+            player.local.x += diff.x;
+            player.local.y += diff.y;
             moveOrRotated = true;
           }
         }
 
         if (moveOrRotated) {
-          player.socket.emit('tankMoved', {x: player.x, y: player.y, rotation: player.rotation});
+          player.socket.emit('tankMoved', {x: player.local.x, y: player.local.y, rotation: player.local.rotation});
         }
 
         if (coolingTime > 0) {
           coolingTime -= deltaTime;
         } else if (game.input.a) {
           // fire bullet
-          var bulletPosition = new Vector(0, player.height/2).rotate(-player.rotation);
-          bulletPosition = bulletPosition.add(player.getCenter());
-          player.bulletManager.add(bulletPosition, player.rotation, 0);
+          var rot = player.local.rotation;
+          var center = player.getLocalCenter();
+          var bulletPosition = new Vector(0, player.height/2).rotate(-rot);
+          bulletPosition = bulletPosition.add(center);
+          player.bulletManager.addLocal(bulletPosition, rot, 0);
           coolingTime = 1;
         }
 
@@ -58,7 +75,7 @@ define(['js/Vector', 'js/Segment', 'js/Tank'], function(Vector, Segment, Tank) {
     },
 
     canMove: function(diff) {
-      var pos = this.getCenter().add(diff);
+      var pos = this.getLocalCenter().add(diff);
       return (0 < pos.x && pos.x < this.game.width &&
               0 < pos.y && pos.y < this.game.height);
     }
