@@ -1,8 +1,10 @@
 define(['js/Vector', 'js/Segment', 'js/Tank'], function(Vector, Segment, Tank) {
   var Player = enchant.Class.create(Tank, {
-    initialize: function(game, bulletManager) {
+    initialize: function(game, bulletManager, socket) {
       Tank.call(this, game, game.width/2 - 22/2, game.height/2 - 32/2, 0, bulletManager);
       this.image = game.assets['/images/tank.png'];
+
+      this.socket = socket;
 
       var player = this;
 
@@ -33,7 +35,7 @@ define(['js/Vector', 'js/Segment', 'js/Tank'], function(Vector, Segment, Tank) {
         }
 
         if (moveOrRotated) {
-          player.dispatchEvent(new enchant.Event(enchant.Event.MOVED_OR_ROTATED));
+          this.socket.emit('tankMoved', {x: player.x, y: player.y, rotation: player.rotation});
         }
 
         if (coolingTime > 0) {

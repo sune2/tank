@@ -26,19 +26,12 @@ require(
         enemyManager.addGroupTo(scene);
         enemyManager.setSocketListeners(socket);
 
-        var player = new Player(game, bulletManager);
+        var player = new Player(game, bulletManager, socket);
         scene.addChild(player);
 
         bulletManager.addGroupTo(scene); // draw bullets above tanks
 
         socket.emit('tankAdded', {x: player.x, y: player.y, rotation: player.rotation});
-        player.on(enchant.Event.MOVED_OR_ROTATED, function() {
-          socket.emit('tankMoved', {x: player.x, y: player.y, rotation: player.rotation});
-        });
-        player.on(enchant.Event.FIRE_BULLET, function(bullet) {
-          console.log(bullet.target);
-          console.log({x: bullet.x, y: bullet.y, rotation: bullet.rotation});
-        });
       };
       game.start();
     }
