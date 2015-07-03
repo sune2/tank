@@ -16,6 +16,7 @@ var tanks = {};
 
 io.on('connection', function(socket) {
   console.log('Client connected... : ' + socket.id);
+
   socket.on('tankAdded', function(tank) {
     console.log(socket.id + " : " + tank);
     for (var id in tanks) {
@@ -23,16 +24,23 @@ io.on('connection', function(socket) {
     }
     tanks[socket.id] = tank;
     socket.broadcast.emit('tankAdded', socket.id, tank);
-    socket.on('tankMoved', function(tank) {
-      tanks[socket.id] = tank;
-      socket.broadcast.emit('tankMoved', socket.id, tank);
-    });
-    socket.on('disconnect', function() {
-      console.log('Disconnected : ' + socket.id);
-      delete tanks[socket.id];
-      socket.broadcast.emit('tankRemoved', socket.id);
-    });
   });
+
+  socket.on('tankMoved', function(tank) {
+    tanks[socket.id] = tank;
+    socket.broadcast.emit('tankMoved', socket.id, tank);
+  });
+
+  socket.on('disconnect', function() {
+    console.log('Disconnected : ' + socket.id);
+    delete tanks[socket.id];
+    socket.broadcast.emit('tankRemoved', socket.id);
+  });
+
+  socket.on('bulletAdded', function(bullet) {
+    socket.broadcast.emit('bulletAdded', bullet);
+  });
+
 });
 
 

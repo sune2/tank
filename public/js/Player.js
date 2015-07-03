@@ -33,17 +33,18 @@ define(['js/Vector'], function(Vector) {
           var diff = direction.multiply(100 * deltaTime);
           if (player.canMove(diff)) {
             player.moveBy(diff.x, diff.y);
+            moveOrRotated = true;
           }
         }
 
-        if (game.input.right || game.input.left || game.input.up) {
+        if (moveOrRotated) {
           player.dispatchEvent(new enchant.Event(enchant.Event.MOVED_OR_ROTATED));
         }
 
-        // fire bullet
         if (coolingTime > 0) {
           coolingTime -= deltaTime;
         } else if (game.input.a) {
+          // fire bullet
           var bulletPosition = new Vector(0, player.height).rotate(-player.rotation);
           bulletPosition = bulletPosition.add(player.getCenter());
           player.bulletManager.add(bulletPosition, player.rotation, 0);
