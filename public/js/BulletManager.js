@@ -1,10 +1,13 @@
 define(['js/Vector', 'js/Segment', 'js/Bullet'], function(Vector, Segment, Bullet) {
-  var BulletManager = function(game, scene) {
+  var BulletManager = function(game) {
     this.game = game;
     this.group = new enchant.Group();
-    scene.addChild(this.group);
     this.bullets = {};
     this.bulletCount = 0;
+  };
+
+  BulletManager.prototype.addGroupTo = function(scene) {
+    scene.addChild(this.group);
   };
 
   BulletManager.prototype.add = function(position, rotation, type) {

@@ -18,12 +18,15 @@ require(
         scene.backgroundColor = '#ffa';
         game.pushScene(scene);
 
-        var bulletManager = new BulletManager(game, scene);
-        var enemyManager = new EnemyManager(game, scene, bulletManager);
+        var bulletManager = new BulletManager(game);
+        var enemyManager = new EnemyManager(game, bulletManager);
+        enemyManager.addGroupTo(scene);
         enemyManager.setSocketListeners(socket);
 
         var player = new Player(game, bulletManager);
         scene.addChild(player);
+
+        bulletManager.addGroupTo(scene); // draw bullets above tanks
 
         socket.emit('tankAdded', {x: player.x, y: player.y, rotation: player.rotation});
         player.on(enchant.Event.MOVED_OR_ROTATED, function() {
