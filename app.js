@@ -41,6 +41,11 @@ io.on('connection', function(socket) {
     socket.broadcast.emit('bulletAdded', bullet);
   });
 
+  socket.on('damaged', function(bulletId) {
+    console.log('damaged : ' + socket.id + ' : ' + bulletId);
+    socket.broadcast.emit('bulletRemoved', bulletId);
+  });
+
 });
 
 

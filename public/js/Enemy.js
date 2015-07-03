@@ -8,7 +8,7 @@ define(['js/Tank'], function(Tank) {
       this.on(enchant.Event.ENTER_FRAME, function() {
         enemy.bulletManager.checkCollisionSegments(enemy.getSegments(), 0, function() {
           console.log("hit??");
-          return true;
+          return false;
         });
       });
     }

@@ -35,7 +35,7 @@ define(['js/Vector', 'js/Segment', 'js/Tank'], function(Vector, Segment, Tank) {
         }
 
         if (moveOrRotated) {
-          this.socket.emit('tankMoved', {x: player.x, y: player.y, rotation: player.rotation});
+          player.socket.emit('tankMoved', {x: player.x, y: player.y, rotation: player.rotation});
         }
 
         if (coolingTime > 0) {
@@ -49,8 +49,9 @@ define(['js/Vector', 'js/Segment', 'js/Tank'], function(Vector, Segment, Tank) {
         }
 
         // collide with bullets
-        player.bulletManager.checkCollisionSegments(player.getSegments(), 1, function() {
+        player.bulletManager.checkCollisionSegments(player.getSegments(), 1, function(bullet) {
           console.log("damaged!!!");
+          player.socket.emit('damaged', bullet.id);
           return true;
         });
       });

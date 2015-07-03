@@ -9,7 +9,14 @@ define(['js/Vector', 'js/Segment', 'js/Bullet'], function(Vector, Segment, Bulle
     var self = this;
     this.socket.on('bulletAdded', function(bullet) {
       var position = new Vector(bullet.x, bullet.y);
-      self.add(position, bullet.rotation, 1);
+      self.add(position, bullet.rotation, 1, bullet.id);
+    });
+    this.socket.on('bulletRemoved', function(bulletId) {
+      var bullet = self.bullets[bulletId];
+      // 既にローカルで壁にあたったりして除去されている可能性があるのでチェック
+      if (bullet) {
+        bullet.remove();
+      }
     });
   };
 
@@ -17,14 +24,18 @@ define(['js/Vector', 'js/Segment', 'js/Bullet'], function(Vector, Segment, Bulle
     scene.addChild(this.group);
   };
 
-  BulletManager.prototype.add = function(position, rotation, type) {
-    var bullet = new Bullet(this.game, this.bulletCount, position, rotation, type);
+  BulletManager.prototype.add = function(position, rotation, type, id) {
+    if (!id) {
+      id = this.socket.id + ":" + this.bulletCount;
+      this.bulletCount++;
+    }
+    var bullet = new Bullet(this.game, id, position, rotation, type);
     this.group.addChild(bullet);
-    this.bullets[this.bulletCount++] = bullet;
+    this.bullets[id] = bullet;
 
     if (type === 0) {
       // emit 'bulletAdded' if the bullet is player's.
-      this.socket.emit('bulletAdded', {x: position.x, y: position.y, rotation:rotation});
+      this.socket.emit('bulletAdded', {x: position.x, y: position.y, rotation: rotation, id: id});
     }
     var self = this;
     bullet.on(enchant.Event.REMOVED, function() {
