@@ -6,6 +6,7 @@ define(['js/Vector'], function(Vector) {
       this.x = game.width/2 - this.width/2;
       this.y = game.height/2 - this.height/2;
       this.bulletManager = bulletManager;
+      this.game = game;
 
       var player = this;
 
@@ -18,16 +19,21 @@ define(['js/Vector'], function(Vector) {
         var deltaTime = (currentTime - previousTime) / 1000;
         previousTime = currentTime;
 
+        var moveOrRotated = false;
         if (game.input.right) {
           player.rotate(200 * deltaTime);
+          moveOrRotated = true;
         }
         if (game.input.left){
           player.rotate(-200 * deltaTime);
+          moveOrRotated = true;
         }
         if (game.input.up) {
           var direction = Vector.unit(player.rotation-90);
           var diff = direction.multiply(100 * deltaTime);
-          player.moveBy(diff.x, diff.y);
+          if (player.canMove(diff)) {
+            player.moveBy(diff.x, diff.y);
+          }
         }
 
         if (game.input.right || game.input.left || game.input.up) {
@@ -45,6 +51,13 @@ define(['js/Vector'], function(Vector) {
         }
       });
 
+    },
+
+    canMove: function(diff) {
+      var x = this.x + diff.x + this.width/2;
+      var y = this.y + diff.y + this.height/2;
+      return (0 < x && x < this.game.width &&
+              0 < y && y < this.game.height);
     }
   });
   return Player;
