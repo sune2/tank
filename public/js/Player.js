@@ -40,24 +40,35 @@ define(['js/Vector'], function(Vector) {
           player.dispatchEvent(new enchant.Event(enchant.Event.MOVED_OR_ROTATED));
         }
 
-        // bullet
+        // fire bullet
         if (coolingTime > 0) {
           coolingTime -= deltaTime;
         } else if (game.input.a) {
           var bulletPosition = new Vector(0, player.height).rotate(-player.rotation);
-          bulletPosition = bulletPosition.add(new Vector(player.x+player.width/2, player.y+player.height/2));
-          player.bulletManager.add(bulletPosition, player.rotation);
+          bulletPosition = bulletPosition.add(player.getCenter());
+          player.bulletManager.add(bulletPosition, player.rotation, 0);
           coolingTime = 1;
         }
+
+        // collide with bullets
+        player.bulletManager.checkCollision(player.getCenter(), 10, 1, function() {
+          console.log("damaged!!!");
+          return true;
+        });
       });
 
     },
 
+    getCenter: function() {
+      var x = this.x + this.width/2;
+      var y = this.y + this.height/2;
+      return new Vector(x, y);
+    },
+
     canMove: function(diff) {
-      var x = this.x + diff.x + this.width/2;
-      var y = this.y + diff.y + this.height/2;
-      return (0 < x && x < this.game.width &&
-              0 < y && y < this.game.height);
+      var pos = this.getCenter().add(diff);
+      return (0 < pos.x && pos.x < this.game.width &&
+              0 < pos.y && pos.y < this.game.height);
     }
   });
   return Player;

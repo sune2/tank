@@ -1,7 +1,8 @@
 define(['js/Enemy'], function(Enemy) {
-  var EnemyManager = function(game, scene) {
+  var EnemyManager = function(game, scene, bulletManager) {
     this.game = game;
     this.enemies = {};
+    this.bulletManager = bulletManager;
     this.group = new enchant.Group();
     scene.addChild(this.group);
   };
@@ -20,7 +21,7 @@ define(['js/Enemy'], function(Enemy) {
   };
 
   EnemyManager.prototype.add = function(id, enemyData) {
-    this.enemies[id] = new Enemy(this.game, enemyData.x, enemyData.y, enemyData.rotation);
+    this.enemies[id] = new Enemy(this.game, enemyData.x, enemyData.y, enemyData.rotation, this.bulletManager);
     this.group.addChild(this.enemies[id]);
   };
 

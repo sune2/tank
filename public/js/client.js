@@ -19,7 +19,7 @@ require(
         game.pushScene(scene);
 
         var bulletManager = new BulletManager(game, scene);
-        var enemyManager = new EnemyManager(game, scene);
+        var enemyManager = new EnemyManager(game, scene, bulletManager);
         enemyManager.setSocketListeners(socket);
 
         var player = new Player(game, bulletManager);

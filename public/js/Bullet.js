@@ -1,13 +1,18 @@
 define(['js/Vector'], function(Vector) {
   var Bullet = enchant.Class.create(enchant.Sprite, {
-    initialize: function(game, position, rotation, id) {
+    /*
+     type : 0 (player's bullet)  1 (enemy's bullet)
+     */
+    initialize: function(game, id, position, rotation, type) {
       enchant.Sprite.call(this, 4, 16);
-      this.image = game.assets['/images/bullet.png'];
+      this.game = game;
+      this.id = id;
       this.x = position.x - this.width/2;
       this.y = position.y - this.height/2;
       this.rotation = rotation;
-      this.id = id;
-      this.game = game;
+      this.type = type;
+
+      this.image = game.assets['/images/bullet.png'];
 
       var bullet = this;
       var previousTime = +new Date();
@@ -20,12 +25,21 @@ define(['js/Vector'], function(Vector) {
         var diff = direction.multiply(150 * deltaTime);
         bullet.moveBy(diff.x, diff.y);
 
-        if (bullet.x < 0 || bullet.x > this.game.width ||
-            bullet.y < 0 || bullet.y > this.game.height) {
+        var center = bullet.getCenter();
+        if (center.x < 0 || center.x > this.game.width ||
+            center.y < 0 || center.y > this.game.height) {
           // out of bounds
-          bullet.parentNode.removeChild(bullet);
+          bullet.remove();
         }
       });
+    },
+
+    getCenter: function() {
+      return new Vector(this.x + this.width / 2, this.y + this.height / 2);
+    },
+
+    remove: function() {
+      this.parentNode.removeChild(this);
     }
   });
 
