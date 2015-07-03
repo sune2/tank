@@ -10,12 +10,8 @@ define(['js/Vector', 'js/Segment'], function(Vector, Segment) {
 
       var enemy = this;
       this.on(enchant.Event.ENTER_FRAME, function() {
-        // enemy.bulletManager.checkCollision(enemy.getCenter(), 10, 0, function() {
-        //   console.log("hit!!!");
-        //   return true;
-        // });
         enemy.bulletManager.checkCollisionSegments(enemy.getSegments(), 0, function() {
-          console.log("hit!!");
+          console.log("hit??");
           return true;
         });
       });
