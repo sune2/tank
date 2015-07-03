@@ -45,7 +45,7 @@ define(['js/Vector'], function(Vector) {
           coolingTime -= deltaTime;
         } else if (game.input.a) {
           // fire bullet
-          var bulletPosition = new Vector(0, player.height).rotate(-player.rotation);
+          var bulletPosition = new Vector(0, player.height/2).rotate(-player.rotation);
           bulletPosition = bulletPosition.add(player.getCenter());
           player.bulletManager.add(bulletPosition, player.rotation, 0);
           coolingTime = 1;

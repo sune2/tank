@@ -46,5 +46,24 @@ define(['js/Vector', 'js/Segment', 'js/Bullet'], function(Vector, Segment, Bulle
     }
   };
 
+  BulletManager.prototype.checkCollisionSegments = function(segments, bulletType, callback) {
+    for (var id in this.bullets) {
+      var bullet = this.bullets[id];
+      if (bulletType !== bullet.type) continue;
+      var bulletSegment = bullet.getSegment();
+      var collided = false;
+      for (var i = 0; i < segments.length; ++i) {
+        if (Segment.distance(segments[i], bulletSegment) < 1) {
+          collided = true;
+        }
+      }
+      if (collided) {
+        if (callback(bullet)) {
+          bullet.remove();
+        }
+      }
+    }
+  };
+
   return BulletManager;
 });

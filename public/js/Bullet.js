@@ -1,4 +1,4 @@
-define(['js/Vector'], function(Vector) {
+define(['js/Vector', 'js/Segment'], function(Vector, Segment) {
   var Bullet = enchant.Class.create(enchant.Sprite, {
     /*
      type : 0 (player's bullet)  1 (enemy's bullet)
@@ -36,6 +36,12 @@ define(['js/Vector'], function(Vector) {
 
     getCenter: function() {
       return new Vector(this.x + this.width / 2, this.y + this.height / 2);
+    },
+
+    getSegment: function() {
+      var v = Vector.unit(this.rotation - 90).multiply(7);
+      var center = this.getCenter();
+      return new Segment(center, center.add(v));
     },
 
     remove: function() {
