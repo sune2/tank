@@ -1,17 +1,12 @@
-define(['js/Vector', 'js/Segment'], function(Vector, Segment) {
-  var Player = enchant.Class.create(enchant.Sprite, {
+define(['js/Vector', 'js/Segment', 'js/Tank'], function(Vector, Segment, Tank) {
+  var Player = enchant.Class.create(Tank, {
     initialize: function(game, bulletManager) {
-      enchant.Sprite.call(this, 22, 32);
+      Tank.call(this, game, game.width/2 - 22/2, game.height/2 - 32/2, 0, bulletManager);
       this.image = game.assets['/images/tank.png'];
-      this.x = game.width/2 - this.width/2;
-      this.y = game.height/2 - this.height/2;
-      this.bulletManager = bulletManager;
-      this.game = game;
 
       var player = this;
 
       var previousTime = +new Date();
-
       var coolingTime = 0;
 
       this.on(enchant.Event.ENTER_FRAME, function() {
@@ -57,26 +52,6 @@ define(['js/Vector', 'js/Segment'], function(Vector, Segment) {
           return true;
         });
       });
-
-    },
-
-    getCenter: function() {
-      var x = this.x + this.width/2;
-      var y = this.y + this.height/2;
-      return new Vector(x, y);
-    },
-
-    getSegments: function() {
-      var ps = [[2, 3], [2, 29], [19, 29], [19, 3]];
-      var res = [];
-      for (var i = 0; i < 4; ++i) {
-        var x = this.x + ps[i][0];
-        var y = this.y + ps[i][1];
-        var nx = this.x + ps[(i+1)%4][0];
-        var ny = this.y + ps[(i+1)%4][1];
-        res.push(new Segment(new Vector(x, y), new Vector(nx, ny)));
-      }
-      return res;
     },
 
     canMove: function(diff) {
