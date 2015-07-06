@@ -1,26 +1,38 @@
-define(['js/Vector'], function(Vector) {
-  var Tank = enchant.Class.create(enchant.Sprite, {
-    initialize: function(game, x, y, rotation, bulletManager) {
-      enchant.Sprite.call(this, 22, 32);
+define([], function() {
+  var Tank = enchant.Class.create(enchant.Group, {
+    initialize: function(game, x, y, tankRotation, bulletManager) {
+      enchant.Group.call(this);
+      this.width = 22;
+      this.height = 32;
+
+      this.tankSprite = new enchant.Sprite(22, 32);
+      this.tankSprite.x = 0;
+      this.tankSprite.y = 0;
+      this.addChild(this.tankSprite);
+
+      this.game = game;
+      this.bulletManager = bulletManager;
+
       this.x = x;
       this.y = y;
-      this.rotation = rotation;
-      this.bulletManager = bulletManager;
-      this.game = game;
+      this.tankRotation = tankRotation;
     },
 
-    getCenter: function() {
-      var x = this.x + this.width/2;
-      var y = this.y + this.height/2;
-      return new Vector(x, y);
+    setTankImage: function(image) {
+      this.tankSprite.image = image;
     },
 
     // for Player
-    getLocalCenter: function() {
-      var x = this.local.x + this.width/2;
-      var y = this.local.y + this.height/2;
-      return new Vector(x, y);
+    tankRotation: {
+      get: function() {
+        return this._tankRotation;
+      },
+      set: function(rotation) {
+        this._tankRotation = rotation;
+        this.tankSprite.rotation = rotation;
+      }
     }
+
   });
   return Tank;
 });
