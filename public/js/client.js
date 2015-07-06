@@ -3,37 +3,33 @@ enchant.Event.MOVED_OR_ROTATED = 'movedorrotated';
 enchant.Event.FIRE_BULLET = 'firebullet';
 
 require(
-  ['js/Player', 'js/EnemyManager', 'js/BulletManager'],
-  function(Player, EnemyManager, BulletManager) {
+  ['js/GameScene'],
+  function(GameScene) {
     $(function() {
       var socket = io.connect('');
+      var game = initGame(socket);
+
       socket.on('connect', function() {
         console.log('connected : ' + socket.id);
-        startGame(socket);
+        game.isConnected = true;
+        if (game.isLoaded) {
+          game.replaceScene(new GameScene(game, socket).scene);
+        }
       });
     });
-    function startGame(socket) {
-      var game = new enchant.Game(320, 320);
+
+    function initGame(socket) {
+      var game = new enchant.Core(320, 320);
       game.preload('/images/tank.png', '/images/enemy.png', '/images/bullet.png');
       game.keybind(32, 'a');
       game.onload = function() {
-        var scene = new enchant.Scene();
-        scene.backgroundColor = '#ffa';
-        game.pushScene(scene);
-
-        var bulletManager = new BulletManager(game, socket);
-        var enemyManager = new EnemyManager(game, bulletManager);
-        enemyManager.addGroupTo(scene);
-        enemyManager.setSocketListeners(socket);
-
-        var player = new Player(game, bulletManager, socket);
-        scene.addChild(player);
-
-        bulletManager.addGroupTo(scene); // draw bullets above tanks
-
-        socket.emit('tankAdded', {x: player.x, y: player.y, rotation: player.rotation});
+        game.isLoaded = true;
+        if (game.isConnected) {
+          game.replaceScene(new GameScene(game, socket).scene);
+        }
       };
       game.start();
+      return game;
     }
   }
 );

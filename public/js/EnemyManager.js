@@ -1,9 +1,10 @@
 define(['js/Enemy'], function(Enemy) {
-  var EnemyManager = function(game, bulletManager) {
+  var EnemyManager = function(game, bulletManager, socket) {
     this.game = game;
     this.enemies = {};
     this.bulletManager = bulletManager;
     this.group = new enchant.Group();
+    this.setSocketListeners(socket);
   };
 
   EnemyManager.prototype.addGroupTo = function(scene) {
@@ -24,6 +25,7 @@ define(['js/Enemy'], function(Enemy) {
   };
 
   EnemyManager.prototype.add = function(id, enemyData) {
+    if (this.enemies[id]) return;
     this.enemies[id] = new Enemy(this.game, enemyData.x, enemyData.y, enemyData.rotation, this.bulletManager);
     this.group.addChild(this.enemies[id]);
   };
