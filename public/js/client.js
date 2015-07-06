@@ -1,6 +1,4 @@
 enchant();
-enchant.Event.MOVED_OR_ROTATED = 'movedorrotated';
-enchant.Event.FIRE_BULLET = 'firebullet';
 
 require(
   ['js/GameScene'],
@@ -27,7 +25,7 @@ require(
 
     function initGame(socket) {
       var game = new enchant.Core(320, 320);
-      game.preload('/images/tank.png', '/images/enemy.png', '/images/bullet.png');
+      game.preload('/images/tank.png', '/images/enemy.png', '/images/bullet.png', '/images/effect0.png');
       game.keybind(32, 'a');
       game.onload = function() {
         var gameScene = new GameScene(game, socket);

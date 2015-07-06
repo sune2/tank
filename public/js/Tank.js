@@ -1,4 +1,4 @@
-define(['js/HPBar'], function(HPBar) {
+define(['js/HPBar', 'js/Effect'], function(HPBar, Effect) {
   var Tank = enchant.Class.create(enchant.Group, {
     initialize: function(game, x, y, tankRotation, bulletManager, tankInfo) {
       enchant.Group.call(this);
@@ -25,6 +25,7 @@ define(['js/HPBar'], function(HPBar) {
       this.x = x;
       this.y = y;
       this.tankRotation = tankRotation;
+      this._hp = this.maxHP;
       this.hp = this.maxHP;
     },
 
@@ -69,6 +70,10 @@ define(['js/HPBar'], function(HPBar) {
         return this._hp;
       },
       set: function(hp) {
+        if (hp < this._hp) {
+          var effect = new Effect(this.game);
+          this.addChild(effect);
+        }
         this._hp = hp;
         this.hpBar.hp = hp;
       }
