@@ -1,4 +1,4 @@
-define(['js/Vector', 'js/Segment', 'js/Bullet'], function(Vector, Segment, Bullet) {
+define(['js/Vector', 'js/Bullet'], function(Vector, Bullet) {
   var BulletManager = function(game, socket) {
     this.game = game;
     this.group = new enchant.Group();
@@ -45,40 +45,6 @@ define(['js/Vector', 'js/Segment', 'js/Bullet'], function(Vector, Segment, Bulle
     this.bulletCount++;
     console.log('bullet Added');
     this.socket.emit('bulletAdded', {x: position.x, y: position.y, rotation: rotation, id: id});
-  };
-
-
-  BulletManager.prototype.checkCollision = function(position, radius, bulletType, callback) {
-    for (var id in this.bullets) {
-      var bullet = this.bullets[id];
-      if (bulletType !== bullet.type) continue;
-      var distance = bullet.getCenter().subtract(position).magnitude();
-      if (distance < radius) {
-        if (callback(bullet)) {
-          bullet.remove();
-        }
-      }
-    }
-  };
-
-  BulletManager.prototype.checkCollisionSegments = function(segments, bulletType, callback) {
-    return;
-    for (var id in this.bullets) {
-      var bullet = this.bullets[id];
-      if (bulletType !== bullet.type) continue;
-      var bulletSegment = bullet.getSegment();
-      var collided = false;
-      for (var i = 0; i < segments.length; ++i) {
-        if (Segment.distance(segments[i], bulletSegment) < 1) {
-          collided = true;
-        }
-      }
-      if (collided) {
-        if (callback(bullet)) {
-          bullet.remove();
-        }
-      }
-    }
   };
 
   return BulletManager;

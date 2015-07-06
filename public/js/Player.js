@@ -1,4 +1,4 @@
-define(['js/Vector', 'js/Segment', 'js/Tank'], function(Vector, Segment, Tank) {
+define(['js/Vector', 'js/Tank'], function(Vector, Tank) {
   var Player = enchant.Class.create(Tank, {
     initialize: function(game, bulletManager, socket) {
       Tank.call(this, game, game.width/2 - 22/2, game.height/2 - 32/2, 0, bulletManager);
@@ -64,13 +64,6 @@ define(['js/Vector', 'js/Segment', 'js/Tank'], function(Vector, Segment, Tank) {
           player.bulletManager.addLocal(bulletPosition, rot, 0);
           coolingTime = 1;
         }
-
-        // collide with bullets
-        player.bulletManager.checkCollisionSegments(player.getSegments(), 1, function(bullet) {
-          console.log("damaged!!!");
-          player.socket.emit('damaged', bullet.id);
-          return true;
-        });
       });
     },
 

@@ -18,13 +18,9 @@ var TankManager = require('./server/TankManager.js'),
 var tankManager = new TankManager();
 var bulletManager = new BulletManager(tankManager, function collided(bullet, owner) {
   // collided bullet with owner's tank
-  console.log(bullet + ' ' + owner);
   io.emit('tankDamaged', owner);
   io.emit('bulletRemoved', bullet.id);
-  console.log(bullet + ' ' + owner);
 });
-
-// var tanks = {};
 
 io.on('connection', function(socket) {
   console.log('Client connected... : ' + socket.id);
@@ -60,15 +56,6 @@ io.on('connection', function(socket) {
         socket.broadcast.emit('bulletAdded', bulletData);
         socket.emit('myBulletAdded', bulletData);
         bulletManager.add(socket.id, bulletData);
-      }, 150
-    );
-  });
-
-  socket.on('damaged', function(bulletId) {
-    setTimeout(
-      function() {
-        console.log('damaged : ' + socket.id + ' : ' + bulletId);
-        socket.broadcast.emit('bulletRemoved', bulletId);
       }, 150
     );
   });
