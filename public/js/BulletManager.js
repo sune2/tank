@@ -62,6 +62,7 @@ define(['js/Vector', 'js/Segment', 'js/Bullet'], function(Vector, Segment, Bulle
   };
 
   BulletManager.prototype.checkCollisionSegments = function(segments, bulletType, callback) {
+    return;
     for (var id in this.bullets) {
       var bullet = this.bullets[id];
       if (bulletType !== bullet.type) continue;

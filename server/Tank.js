@@ -24,4 +24,12 @@ Tank.prototype.setData = function(tankData) {
   this.rotation = tankData.rotation;
 };
 
+Tank.prototype.getData = function() {
+  return {
+    x: this.x,
+    y: this.y,
+    rotation: this.rotation
+  };
+};
+
 module.exports = Tank;

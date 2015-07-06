@@ -1,30 +1,46 @@
 var Vector = require(__dirname + '/Vector'),
-    Segment = require(__dirname + '/Segment');
+    Segment = require(__dirname + '/Segment'),
+    Bullet = require(__dirname + '/Bullet');
 
-var BulletManager = function(tankManager) {
+var BulletManager = function(tankManager, collidedCallbak) {
   this.tankManager = tankManager;
   this.bullets = {};
+  this.collidedCallback = collidedCallbak;
 
   var previousTime = +new Date();
+  var self = this;
   this.interval = setInterval(function() {
     var currentTime = +new Date();
     var deltaTime = (currentTime - previousTime) / 1000;
     previousTime = currentTime;
 
-    for (var key in this.bullets) {
-      this.bullets[key].update(deltaTime);
+    for (var key in self.bullets) {
+      self.bullets[key].update(deltaTime);
     }
+
+    self.checkCollisionTanks();
   }, 33);
+};
+
+BulletManager.prototype.add = function(owner, bulletData) {
+  this.bullets[bulletData.id] = new Bullet(owner, bulletData, this);
 };
 
 BulletManager.prototype.removeBullet = function(id) {
   delete this.bullets[id];
 };
 
-BulletManager.prototype.checkCollisionSegments = function(segments, bulletType, callback) {
+BulletManager.prototype.checkCollisionTanks = function() {
+  for (var tankId in this.tankManager.tanks) {
+    var tank = this.tankManager.tanks[tankId];
+    this.checkCollisionSegments(tankId, tank.getSegments());
+  }
+};
+
+BulletManager.prototype.checkCollisionSegments = function(owner, segments) {
   for (var id in this.bullets) {
     var bullet = this.bullets[id];
-    if (bulletType !== bullet.type) continue;
+    if (bullet.owner === owner) continue;
     var bulletSegment = bullet.getSegment();
     var collided = false;
     for (var i = 0; i < segments.length; ++i) {
@@ -33,12 +49,10 @@ BulletManager.prototype.checkCollisionSegments = function(segments, bulletType, 
       }
     }
     if (collided) {
-      if (callback(bullet)) {
-        bullet.remove();
-      }
+      this.collidedCallback(bullet, owner);
+      this.removeBullet(bullet.id);
     }
   }
 };
-
 
 module.exports = BulletManager;
