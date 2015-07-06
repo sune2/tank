@@ -10,9 +10,10 @@ var TankManager = require('./server/TankManager.js'),
     BulletManager = require('./server/BulletManager.js');
 
 var tankManager = new TankManager();
-var bulletManager = new BulletManager(tankManager, function collided(bullet, tankId) {
+var bulletManager = new BulletManager(tankManager, function collided(bullet, tankId, hp) {
   // bullet collided with the tank of tankId
-  io.emit('tankDamaged', tankId);
+  console.log('damaged : ' + bullet.id + ' : ' + tankId + ' ' + hp);
+  io.emit('tankDamaged', tankId, hp);
   io.emit('bulletRemoved', bullet.id);
 });
 
@@ -22,9 +23,11 @@ var delayTimeForDebug = heroku ? 0 : 150;
 
 io.on('connection', function(socket) {
   console.log('Client connected... : ' + socket.id);
-
+  for (var id in tankManager.tanks) {
+    console.log('- ' + id);
+  }
   socket.on('tankAdded', function(tankData) {
-    console.log(socket.id + " : " + tankData);
+    console.log('tank added : ' + socket.id);
     for (var id in tankManager.tanks) {
       socket.emit('tankAdded', id, tankManager.tanks[id].getData());
     }

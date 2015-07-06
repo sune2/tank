@@ -22,7 +22,8 @@ define(
       this.socket.emit('tankAdded', {
         x: this.player.x,
         y: this.player.y,
-        rotation: this.player.rotation
+        rotation: this.player.rotation,
+        hp: this.player.hp
       });
     };
 

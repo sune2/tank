@@ -22,6 +22,9 @@ Tank.prototype.setData = function(tankData) {
   this.x = tankData.x;
   this.y = tankData.y;
   this.rotation = tankData.rotation;
+  if (tankData.hp) {
+    this.hp = tankData.hp;
+  }
 };
 
 Tank.prototype.getData = function() {

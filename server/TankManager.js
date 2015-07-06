@@ -17,4 +17,11 @@ TankManager.prototype.remove = function(socketId) {
   delete this.tanks[socketId];
 };
 
+TankManager.prototype.damaged = function(socketId) {
+  if (this.tanks[socketId]) {
+    return --this.tanks[socketId].hp;
+  }
+  return -1;
+};
+
 module.exports = TankManager;

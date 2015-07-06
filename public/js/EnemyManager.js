@@ -23,10 +23,11 @@ define(['js/Enemy'], function(Enemy) {
     socket.on('tankRemoved', function(id) {
       self.remove(id);
     });
-    socket.on('tankDamaged', function(id) {
+    socket.on('tankDamaged', function(id, hp) {
       var enemy = self.enemies[id];
       if (enemy) {
         console.log('enemy(' + id + ') is damaged');
+        enemy.hp = hp;
       }
     });
   };

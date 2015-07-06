@@ -8,6 +8,7 @@ define(['js/HPBar'], function(HPBar) {
       this.game = game;
       this.bulletManager = bulletManager;
       this.tankInfo = tankInfo;
+      this.maxHP = 10;
 
       // tank sprite
       this.tankSprite = new enchant.Sprite(22, 32);
@@ -16,7 +17,7 @@ define(['js/HPBar'], function(HPBar) {
       this.addChild(this.tankSprite);
 
       // hp bar
-      this.hpBar = new HPBar();
+      this.hpBar = new HPBar(this.maxHP);
       this.hpBar.myOffSetX = this.width / 2 - this.hpBar.width / 2;
       this.hpBar.myOffSetY = -15;
       this.tankInfo.addChild(this.hpBar);
@@ -24,6 +25,7 @@ define(['js/HPBar'], function(HPBar) {
       this.x = x;
       this.y = y;
       this.tankRotation = tankRotation;
+      this.hp = this.maxHP;
     },
 
     setTankImage: function(image) {
@@ -59,6 +61,16 @@ define(['js/HPBar'], function(HPBar) {
         this._y = y;
         this.hpBar.y = y + this.hpBar.myOffSetY;
         this._dirty = true;
+      }
+    },
+
+    hp: {
+      get: function() {
+        return this._hp;
+      },
+      set: function(hp) {
+        this._hp = hp;
+        this.hpBar.hp = hp;
       }
     },
 

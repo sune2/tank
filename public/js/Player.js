@@ -20,9 +20,10 @@ define(['js/Vector', 'js/Tank'], function(Vector, Tank) {
         player.tankRotation = tankData.rotation;
       });
 
-      socket.on('tankDamaged', function(id) {
+      socket.on('tankDamaged', function(id, hp) {
         if (id === socket.id) {
           console.log('damaged!!!');
+          this.hp = hp;
         }
       });
 
