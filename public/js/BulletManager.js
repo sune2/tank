@@ -43,7 +43,6 @@ define(['js/Vector', 'js/Bullet'], function(Vector, Bullet) {
   BulletManager.prototype.addLocal = function(position, rotation) {
     var id = this.socket.id + ":" + this.bulletCount;
     this.bulletCount++;
-    console.log('bullet Added');
     this.socket.emit('bulletAdded', {x: position.x, y: position.y, rotation: rotation, id: id});
   };
 

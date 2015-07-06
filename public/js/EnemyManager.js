@@ -22,6 +22,12 @@ define(['js/Enemy'], function(Enemy) {
     socket.on('tankRemoved', function(id) {
       self.remove(id);
     });
+    socket.on('tankDamaged', function(id) {
+      var enemy = self.enemies[id];
+      if (enemy) {
+        console.log('enemy(' + id + ') is damaged');
+      }
+    });
   };
 
   EnemyManager.prototype.add = function(id, enemyData) {
