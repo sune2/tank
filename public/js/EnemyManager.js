@@ -60,5 +60,15 @@ define(['js/Enemy'], function(Enemy) {
     }
   };
 
+  EnemyManager.prototype.clear = function() {
+    var tmp = [];
+    for (var id in this.enemies) {
+      tmp.push(this.enemies[id]);
+    }
+    tmp.forEach(function(enemy) {
+      enemy.remove();
+    });
+  };
+
   return EnemyManager;
 });

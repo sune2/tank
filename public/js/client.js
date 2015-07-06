@@ -9,11 +9,18 @@ require(
       var socket = io.connect('');
       var game = initGame(socket);
 
+
       socket.on('connect', function() {
         console.log('connected : ' + socket.id);
         game.isConnected = true;
         if (game.isLoaded) {
-          game.replaceScene(new GameScene(game, socket).scene);
+          emitTankAdded(socket, game);
+        }
+      });
+      socket.on('disconnect', function() {
+        if (game.gameScene) {
+          console.log('clear');
+          game.gameScene.clearEnemies();
         }
       });
     });
@@ -23,13 +30,26 @@ require(
       game.preload('/images/tank.png', '/images/enemy.png', '/images/bullet.png');
       game.keybind(32, 'a');
       game.onload = function() {
+        var gameScene = new GameScene(game, socket);
+        game.gameScene = gameScene;
+        game.replaceScene(gameScene.scene);
         game.isLoaded = true;
         if (game.isConnected) {
-          game.replaceScene(new GameScene(game, socket).scene);
+          emitTankAdded(socket, game);
         }
       };
       game.start();
       return game;
+    }
+
+    function emitTankAdded(socket, game) {
+      var player = game.gameScene.player;
+      socket.emit('tankAdded', {
+        x: player.x,
+        y: player.y,
+        rotation: player.tankRotation,
+        hp: player.hp
+      });
     }
   }
 );

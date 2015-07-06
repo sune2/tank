@@ -19,13 +19,12 @@ define(
       this.bulletManager.addGroupTo(this.scene); // draw bullets above tanks
       this.scene.addChild(this.tankInfo); // draw bullets above tanks
 
-      this.socket.emit('tankAdded', {
-        x: this.player.x,
-        y: this.player.y,
-        rotation: this.player.rotation,
-        hp: this.player.hp
-      });
+    };
+
+    GameScene.prototype.clearEnemies = function() {
+      this.enemyManager.clear();
     };
 
     return GameScene;
-  });
+  }
+);
