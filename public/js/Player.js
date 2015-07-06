@@ -1,7 +1,7 @@
 define(['js/Vector', 'js/Tank'], function(Vector, Tank) {
   var Player = enchant.Class.create(Tank, {
-    initialize: function(game, bulletManager, socket) {
-      Tank.call(this, game, game.width/2 - 22/2, game.height/2 - 32/2, 0, bulletManager);
+    initialize: function(game, bulletManager, tankInfo, socket) {
+      Tank.call(this, game, game.width/2 - 22/2, game.height/2 - 32/2, 0, bulletManager, tankInfo);
       this.setTankImage(game.assets['/images/tank.png']);
       this.socket = socket;
 

@@ -4,15 +4,11 @@ define([], function() {
       enchant.Sprite.call(this, 28, 5);
       this.surface = new enchant.Surface(this.width, this.height);
       this.image = this.surface;
-      this._style.zIndex = 2;
-      console.log(this._style);
       var context = this.surface.context;
-      context.globalAlpha = 0.6;
-      context.fillStyle = 'black';
+      context.fillStyle = 'rgba(0,0,0,1.0)';
       context.strokeRect(0, 0, this.width, this.height);
-      context.fillStyle = 'red';
+      context.fillStyle = 'rgba(255,0,0,0.7)';
       context.fillRect(1, 1, this.width-12, this.height-2);
-
     }
   });
   return Player;

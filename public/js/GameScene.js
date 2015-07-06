@@ -5,9 +5,10 @@ define(
       this.game = game;
       this.socket = socket;
 
+      this.tankInfo = new enchant.Group();
       this.bulletManager = new BulletManager(this.game, this.socket);
-      this.enemyManager = new EnemyManager(this.game, this.bulletManager, this.socket);
-      this.player = new Player(this.game, this.bulletManager, this.socket);
+      this.enemyManager = new EnemyManager(this.game, this.bulletManager, this.tankInfo, this.socket);
+      this.player = new Player(this.game, this.bulletManager, this.tankInfo, this.socket);
 
       this.scene = new enchant.Scene();
       this.scene.backgroundColor = '#ffa';
@@ -16,6 +17,8 @@ define(
       this.enemyManager.addGroupTo(this.scene);
       this.scene.addChild(this.player);
       this.bulletManager.addGroupTo(this.scene); // draw bullets above tanks
+      this.scene.addChild(this.tankInfo); // draw bullets above tanks
+
       this.socket.emit('tankAdded', {
         x: this.player.x,
         y: this.player.y,
