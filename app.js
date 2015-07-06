@@ -5,12 +5,6 @@ var express = require('express'),
 
 app.use(express.static('public'));
 
-/*
- * 戦車情報
- - position
- - rotation
- - cont....
- */
 
 var TankManager = require('./server/TankManager.js'),
     BulletManager = require('./server/BulletManager.js');
@@ -20,7 +14,12 @@ var bulletManager = new BulletManager(tankManager, function collided(bullet, own
   // collided bullet with owner's tank
   io.emit('tankDamaged', owner);
   io.emit('bulletRemoved', bullet.id);
+  io.emit('bulletRemoved', bullet.id);
 });
+
+var heroku = !!process.env.PORT;
+
+var delayTimeForDebug = heroku ? 0 : 150;
 
 io.on('connection', function(socket) {
   console.log('Client connected... : ' + socket.id);
@@ -40,7 +39,7 @@ io.on('connection', function(socket) {
         tankManager.setData(socket.id, tankData);
         socket.broadcast.emit('tankMoved', socket.id, tankData);
         socket.emit('myTankMoved', tankData);
-      },150
+      }, delayTimeForDebug
     );
   });
 
@@ -56,7 +55,7 @@ io.on('connection', function(socket) {
         socket.broadcast.emit('bulletAdded', bulletData);
         socket.emit('myBulletAdded', bulletData);
         bulletManager.add(socket.id, bulletData);
-      }, 150
+      }, delayTimeForDebug
     );
   });
 
