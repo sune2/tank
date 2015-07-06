@@ -23,7 +23,7 @@ define(['js/Vector', 'js/Tank'], function(Vector, Tank) {
       socket.on('tankDamaged', function(id, hp) {
         if (id === socket.id) {
           console.log('damaged!!!');
-          this.hp = hp;
+          player.hp = hp;
         }
       });
 

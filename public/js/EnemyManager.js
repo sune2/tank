@@ -35,6 +35,9 @@ define(['js/Enemy'], function(Enemy) {
   EnemyManager.prototype.add = function(id, enemyData) {
     if (this.enemies[id]) return;
     var enemy = new Enemy(this.game, enemyData.x, enemyData.y, enemyData.rotation, this.bulletManager, this.tankInfo);
+    if (enemyData.hp) {
+      enemy.hp = enemyData.hp;
+    }
     this.group.addChild(enemy);
     this.enemies[id] = enemy;
     var self = this;

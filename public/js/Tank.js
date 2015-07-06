@@ -75,8 +75,8 @@ define(['js/HPBar'], function(HPBar) {
     },
 
     remove: function() {
+      this.tankInfo.removeChild(this.hpBar);
       this.parentNode.removeChild(this);
-      this.tankInfo.removeChild(this);
     }
   });
 

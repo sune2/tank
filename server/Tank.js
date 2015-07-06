@@ -31,7 +31,8 @@ Tank.prototype.getData = function() {
   return {
     x: this.x,
     y: this.y,
-    rotation: this.rotation
+    rotation: this.rotation,
+    hp: this.hp
   };
 };
 
