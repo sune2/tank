@@ -37,10 +37,10 @@ BulletManager.prototype.checkCollisionTanks = function() {
   }
 };
 
-BulletManager.prototype.checkCollisionSegments = function(owner, segments) {
+BulletManager.prototype.checkCollisionSegments = function(tankId, segments) {
   for (var id in this.bullets) {
     var bullet = this.bullets[id];
-    if (bullet.owner === owner) continue;
+    if (bullet.owner === tankId) continue;
     var bulletSegment = bullet.getSegment();
     var collided = false;
     for (var i = 0; i < segments.length; ++i) {
@@ -49,7 +49,7 @@ BulletManager.prototype.checkCollisionSegments = function(owner, segments) {
       }
     }
     if (collided) {
-      this.collidedCallback(bullet, owner);
+      this.collidedCallback(bullet, tankId);
       this.removeBullet(bullet.id);
     }
   }
