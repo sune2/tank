@@ -27,6 +27,7 @@ define(['js/HPBar', 'js/Effect'], function(HPBar, Effect) {
       this.tankRotation = tankRotation;
       this._hp = this.maxHP;
       this.hp = this.maxHP;
+      this.isDead = false;
     },
 
     setTankImage: function(image) {
@@ -70,9 +71,9 @@ define(['js/HPBar', 'js/Effect'], function(HPBar, Effect) {
         return this._hp;
       },
       set: function(hp) {
-        if (hp < this._hp) {
-          var effect = new Effect(this.game);
-          this.addChild(effect);
+        if (hp < 0) hp = 0;
+        if (this._hp && hp === 0) {
+          this.die();
         }
         this._hp = hp;
         this.hpBar.hp = hp;
@@ -82,6 +83,19 @@ define(['js/HPBar', 'js/Effect'], function(HPBar, Effect) {
     remove: function() {
       this.tankInfo.removeChild(this.hpBar);
       this.parentNode.removeChild(this);
+    },
+
+    damaged: function(pos) {
+      console.log(pos);
+      var effect = new Effect(this.game);
+      effect.x = pos.x - effect.width / 2;
+      effect.y = pos.y - effect.height / 2;
+      this.tankInfo.addChild(effect);
+    },
+
+    die: function() {
+      this.setTankImage(this.game.assets['/images/dead.png']);
+      this.isDead = true;
     }
   });
 

@@ -31,6 +31,9 @@ Vector.prototype.rotate = function(angle) {
   return new Vector(Math.cos(angle) * this.x - Math.sin(angle) * this.y,
                     Math.sin(angle) * this.x - Math.cos(angle) * this.y);
 };
+Vector.prototype.distance = function(p) {
+  return this.subtract(p).magnitude();
+};
 
 // inner product
 Vector.dot = function(u, v) {

@@ -37,20 +37,46 @@ BulletManager.prototype.checkCollisionTanks = function() {
   }
 };
 
+BulletManager.contain = function(segments, p) {
+  var n = segments.length;
+  for (var i = 0; i < n; ++i) {
+    var p1 = segments[i].p1;
+    var p2 = segments[i].p2;
+    var v1 = p2.subtract(p1);
+    var v2 = p.subtract(p1);
+    if (Vector.cross(v1, v2) < 0) {
+      return false;
+    }
+  }
+  return true;
+};
+
 BulletManager.prototype.checkCollisionSegments = function(tankId, segments) {
+  var tmp = [];
   for (var id in this.bullets) {
-    var bullet = this.bullets[id];
+    tmp.push(this.bullets[id]);
+  }
+  for (var ii = 0; ii < tmp.length; ++ii) {
+    var bullet = tmp[ii];
     if (bullet.owner === tankId) continue;
     var bulletSegment = bullet.getSegment();
-    var collided = false;
+    var p = false;
+
+    if (BulletManager.contain(segments, bulletSegment.p1)) {
+      p = bulletSegment.p1;
+    }
+
     for (var i = 0; i < segments.length; ++i) {
-      if (Segment.distance(segments[i], bulletSegment) < 1) {
-        collided = true;
+      if (Segment.intersect(segments[i], bulletSegment)) {
+        var tp = Segment.crosspoint(segments[i], bulletSegment);
+        if (!p || bulletSegment.p1.distance(p) > bulletSegment.p1.distance(tp)) {
+          p = tp;
+        }
       }
     }
-    if (collided) {
+    if (p) {
       var hp = this.tankManager.damaged(tankId);
-      this.collidedCallback(bullet, tankId, hp);
+      this.collidedCallback(bullet, tankId, hp, p);
       this.removeBullet(bullet.id);
     }
   }

@@ -10,10 +10,10 @@ var TankManager = require('./server/TankManager.js'),
     BulletManager = require('./server/BulletManager.js');
 
 var tankManager = new TankManager();
-var bulletManager = new BulletManager(tankManager, function collided(bullet, tankId, hp) {
+var bulletManager = new BulletManager(tankManager, function collided(bullet, tankId, hp, pos) {
   // bullet collided with the tank of tankId
   console.log('damaged : ' + bullet.id + ' : ' + tankId + ' ' + hp);
-  io.emit('tankDamaged', tankId, hp);
+  io.emit('tankDamaged', tankId, hp, pos);
   io.emit('bulletRemoved', bullet.id);
 });
 

@@ -6,7 +6,7 @@ var Tank = function(tankData) {
 };
 
 Tank.prototype.getSegments = function() {
-  var ps = [[2, 3], [2, 29], [19, 29], [19, 3]];
+  var ps = [[2, 3], [19, 3], [19, 32], [2, 32]];
   var res = [];
   for (var i = 0; i < 4; ++i) {
     var x = this.x + ps[i][0];

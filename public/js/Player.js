@@ -20,9 +20,10 @@ define(['js/Vector', 'js/Tank'], function(Vector, Tank) {
         player.tankRotation = tankData.rotation;
       });
 
-      socket.on('tankDamaged', function(id, hp) {
+      socket.on('tankDamaged', function(id, hp, pos) {
         if (id === socket.id) {
           console.log('damaged!!!');
+          player.damaged(pos);
           player.hp = hp;
         }
       });
@@ -39,6 +40,9 @@ define(['js/Vector', 'js/Tank'], function(Vector, Tank) {
     },
 
     update: function(deltaTime) {
+      if (this.isDead) {
+        return;
+      }
       var moveOrRotated = false;
 
       if (this.game.input.right) {
