@@ -86,6 +86,7 @@ io.on('connection', function(socket) {
   socket.on('tankMoved', function(tankData) {
     setTimeout(
       function() {
+        if (gameState !== 'game') return;
         tankManager.setData(socket.id, tankData);
         io.emit('tankMoved', socket.id, tankData);
       }, delayTimeForDebug
