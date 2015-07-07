@@ -1,7 +1,7 @@
-define(
-  ['js/Player', 'js/EnemyManager', 'js/BulletManager'],
-  function(Player, EnemyManager, BulletManager) {
-    var GameScene = function(game, socket) {
+define(['js/Player', 'js/EnemyManager', 'js/BulletManager'], function(Player, EnemyManager, BulletManager) {
+  var GameScene = enchant.Class.create(enchant.Scene, {
+    initialize: function(game, socket) {
+      enchant.Scene.call(this);
       this.game = game;
       this.socket = socket;
 
@@ -10,21 +10,16 @@ define(
       this.enemyManager = new EnemyManager(this.game, this.bulletManager, this.tankInfo, this.socket);
       this.player = new Player(this.game, this.bulletManager, this.tankInfo, this.socket);
 
-      this.scene = new enchant.Scene();
-      this.scene.backgroundColor = '#ffa';
-      this.game.replaceScene(this.scene);
+      this.backgroundColor = '#ffa';
+      this.enemyManager.addGroupTo(this);
+      this.addChild(this.player);
+      this.bulletManager.addGroupTo(this);
+      this.addChild(this.tankInfo);
+    },
 
-      this.enemyManager.addGroupTo(this.scene);
-      this.scene.addChild(this.player);
-      this.bulletManager.addGroupTo(this.scene); // draw bullets above tanks
-      this.scene.addChild(this.tankInfo); // draw bullets above tanks
-
-    };
-
-    GameScene.prototype.clearEnemies = function() {
+    clearEnemies: function() {
       this.enemyManager.clear();
-    };
-
-    return GameScene;
-  }
-);
+    }
+  });
+  return GameScene;
+});

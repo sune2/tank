@@ -16,9 +16,9 @@ require(
         }
       });
       socket.on('disconnect', function() {
-        if (game.gameScene) {
+        if (game.currentScene) {
           console.log('clear');
-          game.gameScene.clearEnemies();
+          game.currentScene.clearEnemies();
         }
       });
     });
@@ -29,8 +29,7 @@ require(
       game.keybind(32, 'a');
       game.onload = function() {
         var gameScene = new GameScene(game, socket);
-        game.gameScene = gameScene;
-        game.replaceScene(gameScene.scene);
+        game.replaceScene(gameScene);
         game.isLoaded = true;
         if (game.isConnected) {
           emitTankAdded(socket, game);
@@ -41,7 +40,7 @@ require(
     }
 
     function emitTankAdded(socket, game) {
-      var player = game.gameScene.player;
+      var player = game.currentScene.player;
       socket.emit('tankAdded', {
         x: player.x,
         y: player.y,
