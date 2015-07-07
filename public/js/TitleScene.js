@@ -41,7 +41,7 @@ define(['js/Player', 'js/EnemyManager'], function(Player, EnemyManager) {
 
     },
 
-    joinSucceeded: function(tankData) {
+    addPlayer: function(tankData) {
       if (this.player) {
         this.removeChild(this.player);
       }

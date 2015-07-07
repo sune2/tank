@@ -15,6 +15,11 @@ define(['js/Player', 'js/EnemyManager', 'js/BulletManager'], function(Player, En
       this.enemyManager.addGroupTo(this);
       this.bulletManager.addGroupTo(this);
       this.addChild(this.tankInfo);
+
+      this.on(enchant.Event.B_BUTTON_DOWN, function() {
+        console.log('escape down');
+        socket.emit('endGame');
+      });
     },
 
     addPlayer: function(tankData) {

@@ -13,6 +13,14 @@ TankManager.prototype.canJoin = function() {
   return this.size() < 4;
 };
 
+TankManager.prototype.getTitlePositionX = function(idx) {
+  var width = 320;
+  var margin = 70;
+  var tankWidth = 22;
+  var x = idx * margin + width / 2 - margin * 1.5 - tankWidth / 2;
+  return x;
+};
+
 TankManager.prototype.join = function(socketId, username) {
   var idx;
   for (idx = 0; idx < 4; ++idx) {
@@ -20,10 +28,7 @@ TankManager.prototype.join = function(socketId, username) {
       break;
     }
   }
-  var width = 320;
-  var margin = 70;
-  var tankWidth = 22;
-  var x = idx * margin + width / 2 - margin * 1.5 - tankWidth / 2;
+  var x = this.getTitlePositionX(idx);
   var tankData = {
     x: x,
     y: 180,
@@ -63,6 +68,16 @@ TankManager.prototype.damaged = function(socketId) {
     return --this.tanks[socketId].hp;
   }
   return -1;
+};
+
+TankManager.prototype.setTitlePosition = function() {
+  for (var id in this.tanks) {
+    var tank = this.tanks[id];
+    tank.x = this.getTitlePositionX(tank.idx);
+    tank.y = 180;
+    tank.rotation = 0;
+    tank.hp = 10;
+  }
 };
 
 module.exports = TankManager;

@@ -14,6 +14,8 @@ define(['js/Vector', 'js/Tank'], function(Vector, Tank) {
 
       this.disabled = false;
 
+      this.game.input.a = false;
+
       var player = this;
 
       var previousTime = +new Date();

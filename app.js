@@ -62,15 +62,19 @@ io.on('connection', function(socket) {
     }
   });
 
+  socket.on('endGame', function() {
+    if (gameState === 'game') {
+      io.emit('endGame');
+      tankManager.setTitlePosition();
+      gameState = 'title';
+    }
+  });
 
-  // socket.on('tankAdded', function(tankData) {
-  //   console.log('tank added : ' + socket.id);
-  //   for (var id in tankManager.tanks) {
-  //     socket.emit('tankAdded', id, tankManager.tanks[id].getData());
-  //   }
-  //   tankManager.add(socket.id, tankData);
-  //   socket.broadcast.emit('tankAdded', socket.id, tankData);
-  // });
+  socket.on('returnTitle', function() {
+    for (var id in tankManager.tanks) {
+      socket.emit('tankAdded', id, tankManager.tanks[id].getData());
+    }
+  });
 
   socket.on('tankMoved', function(tankData) {
     setTimeout(
