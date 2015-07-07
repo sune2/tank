@@ -5,23 +5,6 @@ define(['js/Vector', 'js/Bullet'], function(Vector, Bullet) {
     this.bullets = {};
     this.bulletCount = 0;
     this.socket = socket;
-
-    var self = this;
-    this.socket.on('bulletAdded', function(bullet) {
-      var position = new Vector(bullet.x, bullet.y);
-      self.add(position, bullet.rotation, 1, bullet.id);
-    });
-    this.socket.on('myBulletAdded', function(bullet) {
-      var position = new Vector(bullet.x, bullet.y);
-      self.add(position, bullet.rotation, 0, bullet.id);
-    });
-    this.socket.on('bulletRemoved', function(bulletId) {
-      var bullet = self.bullets[bulletId];
-      // 既にローカルで壁にあたったりして除去されている可能性があるのでチェック
-      if (bullet) {
-        bullet.remove();
-      }
-    });
   };
 
   BulletManager.prototype.addGroupTo = function(scene) {

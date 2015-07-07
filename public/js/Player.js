@@ -14,20 +14,6 @@ define(['js/Vector', 'js/Tank'], function(Vector, Tank) {
 
       var player = this;
 
-      socket.on('myTankMoved', function(tankData) {
-        player.x = tankData.x;
-        player.y = tankData.y;
-        player.tankRotation = tankData.rotation;
-      });
-
-      socket.on('tankDamaged', function(id, hp, pos) {
-        if (id === socket.id) {
-          console.log('damaged!!!');
-          player.damaged(pos);
-          player.hp = hp;
-        }
-      });
-
       var previousTime = +new Date();
       this.coolingTime = 0;
 

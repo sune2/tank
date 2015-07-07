@@ -5,32 +5,11 @@ define(['js/Enemy'], function(Enemy) {
     this.bulletManager = bulletManager;
     this.tankInfo = tankInfo;
     this.group = new enchant.Group();
-    this.setSocketListeners(socket);
+    this.socket = socket;
   };
 
   EnemyManager.prototype.addGroupTo = function(scene) {
     scene.addChild(this.group);
-  };
-
-  EnemyManager.prototype.setSocketListeners = function(socket) {
-    var self = this;
-    socket.on('tankAdded', function(id, tank) {
-      self.add(id, tank);
-    });
-    socket.on('tankMoved', function(id, tank) {
-      self.move(id, tank);
-    });
-    socket.on('tankRemoved', function(id) {
-      self.remove(id);
-    });
-    socket.on('tankDamaged', function(id, hp, pos) {
-      var enemy = self.enemies[id];
-      if (enemy) {
-        console.log('enemy(' + id + ') is damaged');
-        enemy.hp = hp;
-        enemy.damaged(pos);
-      }
-    });
   };
 
   EnemyManager.prototype.add = function(id, enemyData) {

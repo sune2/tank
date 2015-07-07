@@ -1,8 +1,8 @@
 enchant();
 
 require(
-  ['js/GameScene'],
-  function(GameScene) {
+  ['js/setSocketListener', 'js/GameScene'],
+  function(setSocketListener, GameScene) {
     $(function() {
       var socket = io.connect('');
       var game = initGame(socket);
@@ -21,6 +21,8 @@ require(
           game.currentScene.clearEnemies();
         }
       });
+
+      setSocketListener(game, socket);
     });
 
     function initGame(socket) {
