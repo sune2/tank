@@ -17,8 +17,10 @@ var bulletManager = new BulletManager(tankManager, function collided(bullet, tan
   io.emit('bulletRemoved', bullet.id);
 });
 
-var heroku = !!process.env.PORT;
+var gameState = 'title';
+var readyStartGameCount = 0;
 
+var heroku = !!process.env.PORT;
 var delayTimeForDebug = heroku ? 0 : 150;
 
 io.on('connection', function(socket) {
@@ -28,6 +30,10 @@ io.on('connection', function(socket) {
   }
 
   socket.on('join', function(username) {
+    if (gameState !== 'title') {
+      return;
+    }
+    console.log('join');
     for (var id in tankManager.tanks) {
       socket.emit('tankAdded', id, tankManager.tanks[id].getData());
     }
@@ -38,14 +44,33 @@ io.on('connection', function(socket) {
     }
   });
 
-  socket.on('tankAdded', function(tankData) {
-    console.log('tank added : ' + socket.id);
-    for (var id in tankManager.tanks) {
-      socket.emit('tankAdded', id, tankManager.tanks[id].getData());
+  socket.on('startGame', function(){
+    if (gameState === 'title') {
+      io.emit('startGame');
+      gameState = 'game';
     }
-    tankManager.add(socket.id, tankData);
-    socket.broadcast.emit('tankAdded', socket.id, tankData);
   });
+
+  socket.on('readyStartGame', function(){
+    readyStartGameCount++;
+    console.log('readyStartGame ' + readyStartGameCount);
+    if (readyStartGameCount === tankManager.size()) {
+      readyStartGameCount = 0;
+      for (var id in tankManager.tanks) {
+        io.emit('tankAdded', id, tankManager.tanks[id].getData());
+      }
+    }
+  });
+
+
+  // socket.on('tankAdded', function(tankData) {
+  //   console.log('tank added : ' + socket.id);
+  //   for (var id in tankManager.tanks) {
+  //     socket.emit('tankAdded', id, tankManager.tanks[id].getData());
+  //   }
+  //   tankManager.add(socket.id, tankData);
+  //   socket.broadcast.emit('tankAdded', socket.id, tankData);
+  // });
 
   socket.on('tankMoved', function(tankData) {
     setTimeout(

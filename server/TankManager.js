@@ -5,8 +5,12 @@ var TankManager = function() {
   this.tankExist = new Array(4);
 };
 
+TankManager.prototype.size = function() {
+  return Object.keys(this.tanks).length;
+};
+
 TankManager.prototype.canJoin = function() {
-  return Object.keys(this.tanks).length < 4;
+  return this.size() < 4;
 };
 
 TankManager.prototype.join = function(socketId, username) {

@@ -1,10 +1,17 @@
-define(['js/Vector'], function(Vector) {
+define(['js/GameScene','js/Vector'], function(GameScene, Vector) {
   var setSocketListener = function(game, socket) {
     // join
     socket.on('joinSucceeded', function(tankData) {
       var scene = game.currentScene;
-      if (scene.sceneName !== 'Title');
+      if (scene.sceneName !== 'Title') return;
       game.currentScene.joinSucceeded(tankData);
+    });
+
+    // start game
+    socket.on('startGame', function() {
+      var gameScene = new GameScene(game, socket);
+      game.replaceScene(gameScene);
+      socket.emit('readyStartGame');
     });
 
     // player
@@ -27,13 +34,18 @@ define(['js/Vector'], function(Vector) {
       }
     });
 
-    // enemy
+    // player or enemy
     socket.on('tankAdded', function(id, tank) {
-      var em = game.currentScene.enemyManager;
-      if (em) {
-        em.add(id, tank);
+      if (id === socket.id) {
+        game.currentScene.addPlayer(tank);
+      } else {
+        var em = game.currentScene.enemyManager;
+        if (em) {
+          em.add(id, tank);
+        }
       }
     });
+    // enemy
     socket.on('tankMoved', function(id, tank) {
       var em = game.currentScene.enemyManager;
       if (em) {

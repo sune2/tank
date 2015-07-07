@@ -7,24 +7,21 @@ define(['js/Player', 'js/EnemyManager'], function(Player, EnemyManager) {
       this.game = game;
       this.socket = socket;
 
-
       // title label
-      this.label = new enchant.Label();
-      this.label.text = 'Tank Battle';
-      this.label.font = '40px Consolas, "Courier New", Courier, Monaco, monospace normal';
-      var w = this.label._boundWidth;
-      this.label.x = this.game.width / 2 - w / 2;
-      this.label.y = 50;
-      this.addChild(this.label);
+      var titleLabel = new enchant.Label();
+      titleLabel.text = 'Tank Battle';
+      titleLabel.font = '40px Consolas, "Courier New", Courier, Monaco, monospace normal';
+      titleLabel.x = this.game.width / 2 - titleLabel._boundWidth / 2;
+      titleLabel.y = 50;
+      this.addChild(titleLabel);
 
       // start label
-      this.label = new enchant.Label();
-      this.label.text = 'Press Space to Start';
-      this.label.font = '16px Consolas, "Courier New", Courier, Monaco, monospace normal';
-      var w = this.label._boundWidth;
-      this.label.x = this.game.width / 2 - w / 2;
-      this.label.y = 270;
-      this.addChild(this.label);
+      var startLabel = new enchant.Label();
+      startLabel.text = 'Press Space to Start';
+      startLabel.font = '16px Consolas, "Courier New", Courier, Monaco, monospace normal';
+      startLabel.x = this.game.width / 2 - startLabel._boundWidth / 2;
+      startLabel.y = 270;
+      this.addChild(startLabel);
 
 
 
@@ -36,6 +33,12 @@ define(['js/Player', 'js/EnemyManager'], function(Player, EnemyManager) {
       this.backgroundColor = '#ffa';
       this.enemyManager.addGroupTo(this);
       this.addChild(this.tankInfo);
+
+      this.on(enchant.Event.A_BUTTON_DOWN, function() {
+        console.log('space down');
+        socket.emit('startGame');
+      });
+
     },
 
     joinSucceeded: function(tankData) {
