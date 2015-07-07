@@ -1,8 +1,8 @@
 enchant();
 
 require(
-  ['js/setSocketListener', 'js/GameScene'],
-  function(setSocketListener, GameScene) {
+  ['js/setSocketListener', 'js/GameScene', 'js/TitleScene'],
+  function(setSocketListener, GameScene, TitleScene) {
     $(function() {
       var socket = io.connect('');
       var game = initGame(socket);
@@ -13,7 +13,7 @@ require(
         socket.username = prompt('名前を入力してください');
         game.isConnected = true;
         if (game.isLoaded) {
-          emitTankAdded(socket, game);
+          emitJoin(socket);
         }
       });
       socket.on('disconnect', function() {
@@ -31,29 +31,21 @@ require(
       game.preload('/images/tank.png', '/images/enemy.png', '/images/bullet.png', '/images/effect0.png', '/images/dead.png');
       game.keybind(32, 'a');
       game.onload = function() {
-        var gameScene = new GameScene(game, socket);
-        game.replaceScene(gameScene);
+        var titleScene = new TitleScene(game, socket);
+        game.replaceScene(titleScene);
+        // var gameScene = new GameScene(game, socket);
+        // game.replaceScene(gameScene);
         game.isLoaded = true;
         if (game.isConnected) {
-          emitTankAdded(socket, game);
+          emitJoin(socket);
         }
       };
       game.start();
       return game;
     }
 
-    function emitTankAdded(socket, game) {
-      var player = game.currentScene.player;
-      socket.emit('tankAdded', {
-        x: player.x,
-        y: player.y,
-        rotation: player.tankRotation,
-        hp: player.hp,
-        name: socket.username
-      });
-      if (socket.username) {
-        player.name = socket.username;
-      }
+    function emitJoin(socket) {
+      socket.emit('join', socket.username);
     }
   }
 );

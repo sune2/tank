@@ -2,6 +2,8 @@ define(['js/Player', 'js/EnemyManager', 'js/BulletManager'], function(Player, En
   var GameScene = enchant.Class.create(enchant.Scene, {
     initialize: function(game, socket) {
       enchant.Scene.call(this);
+
+      this.sceneName = 'Game';
       this.game = game;
       this.socket = socket;
 

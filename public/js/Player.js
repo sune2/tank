@@ -12,6 +12,8 @@ define(['js/Vector', 'js/Tank'], function(Vector, Tank) {
         rotation: this.tankRotation
       };
 
+      this.disabled = false;
+
       var player = this;
 
       var previousTime = +new Date();
@@ -26,7 +28,7 @@ define(['js/Vector', 'js/Tank'], function(Vector, Tank) {
     },
 
     update: function(deltaTime) {
-      if (this.isDead) {
+      if (this.isDead || this.disabled) {
         return;
       }
       var moveOrRotated = false;

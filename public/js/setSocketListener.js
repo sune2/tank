@@ -1,5 +1,12 @@
 define(['js/Vector'], function(Vector) {
   var setSocketListener = function(game, socket) {
+    // join
+    socket.on('joinSucceeded', function(tankData) {
+      var scene = game.currentScene;
+      if (scene.sceneName !== 'Title');
+      game.currentScene.joinSucceeded(tankData);
+    });
+
     // player
     socket.on('myTankMoved', function(tankData) {
       var player = game.currentScene.player;

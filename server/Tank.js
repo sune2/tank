@@ -28,6 +28,9 @@ Tank.prototype.setData = function(tankData) {
   if (tankData.name) {
     this.name = tankData.name;
   }
+  if (tankData.idx) {
+    this.idx = tankData.idx;
+  }
 };
 
 Tank.prototype.getData = function() {

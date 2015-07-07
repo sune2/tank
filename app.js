@@ -26,6 +26,18 @@ io.on('connection', function(socket) {
   for (var id in tankManager.tanks) {
     console.log('- ' + id);
   }
+
+  socket.on('join', function(username) {
+    for (var id in tankManager.tanks) {
+      socket.emit('tankAdded', id, tankManager.tanks[id].getData());
+    }
+    if (tankManager.canJoin()) {
+      var tankData = tankManager.join(socket.id, username);
+      socket.emit('joinSucceeded', tankData);
+      socket.broadcast.emit('tankAdded',  socket.id, tankData);
+    }
+  });
+
   socket.on('tankAdded', function(tankData) {
     console.log('tank added : ' + socket.id);
     for (var id in tankManager.tanks) {
