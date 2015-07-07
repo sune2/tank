@@ -107,12 +107,19 @@ define(['js/HPBar', 'js/NameBar' , 'js/Effect'], function(HPBar, NameBar, Effect
 
     },
 
-    damaged: function(pos) {
-      console.log(pos);
+    move: function(tankData) {
+      this.x = tankData.x;
+      this.y = tankData.y;
+      this.tankRotation = tankData.rotation;
+    },
+
+    // posで弾にあたってhpになった
+    damaged: function(pos, hp) {
       var effect = new Effect(this.game);
       effect.x = pos.x - effect.width / 2;
       effect.y = pos.y - effect.height / 2;
       this.tankInfo.addChild(effect);
+      this.hp = hp;
     },
 
     die: function() {

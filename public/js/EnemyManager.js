@@ -29,28 +29,11 @@ define(['js/Enemy'], function(Enemy) {
     });
   };
 
-  EnemyManager.prototype.move = function(id, enemyData) {
-    var enemy = this.enemies[id];
-    enemy.x = enemyData.x;
-    enemy.y = enemyData.y;
-    enemy.tankRotation = enemyData.rotation;
-  };
-
   EnemyManager.prototype.remove = function(id) {
     var enemy = this.enemies[id];
     if (enemy) {
       enemy.remove();
     }
-  };
-
-  EnemyManager.prototype.clear = function() {
-    var tmp = [];
-    for (var id in this.enemies) {
-      tmp.push(this.enemies[id]);
-    }
-    tmp.forEach(function(enemy) {
-      enemy.remove();
-    });
   };
 
   return EnemyManager;

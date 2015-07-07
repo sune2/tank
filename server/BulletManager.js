@@ -76,7 +76,7 @@ BulletManager.prototype.checkCollisionSegments = function(tankId, segments) {
     }
     if (p) {
       var hp = this.tankManager.damaged(tankId);
-      this.collidedCallback(bullet, tankId, hp, p);
+      this.collidedCallback(bullet, tankId, p, hp);
       this.removeBullet(bullet.id);
     }
   }

@@ -10,9 +10,11 @@ define(['js/Player', 'js/EnemyManager', 'js/BulletManager'], function(Player, En
       this.tankInfo = new enchant.Group();
       this.bulletManager = new BulletManager(this.game, this.socket);
       this.enemyManager = new EnemyManager(this.game, this.bulletManager, this.tankInfo, this.socket);
+      this.playerGroup = new enchant.Group();
 
       this.backgroundColor = '#ffa';
       this.enemyManager.addGroupTo(this);
+      this.addChild(this.playerGroup);
       this.bulletManager.addGroupTo(this);
       this.addChild(this.tankInfo);
 
@@ -24,14 +26,14 @@ define(['js/Player', 'js/EnemyManager', 'js/BulletManager'], function(Player, En
 
     addPlayer: function(tankData) {
       if (this.player) {
-        this.removeChild(this.player);
+        this.playerGroup.removeChild(this.player);
       }
       this.player = new Player(this.game, tankData.x, tankData.y, tankData.rotation,
                                this.bulletManager, this.tankInfo, this.socket);
       this.player.tankRotation = tankData.rotation;
       this.player.hp = tankData.hp;
       this.player.name = tankData.name;
-      this.addChild(this.player);
+      this.playerGroup.addChild(this.player);
     }
 
   });

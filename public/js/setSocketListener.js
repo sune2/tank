@@ -1,4 +1,4 @@
-define(['js/TitleScene', 'js/GameScene','js/Vector'], function(TitleScene, GameScene, Vector) {
+define(['js/TitleScene', 'js/GameScene'], function(TitleScene, GameScene) {
   var setSocketListener = function(game, socket) {
     // join
     socket.on('joinSucceeded', function(tankData) {
@@ -27,87 +27,45 @@ define(['js/TitleScene', 'js/GameScene','js/Vector'], function(TitleScene, GameS
       socket.emit('returnTitle');
     });
 
-    // player
-    socket.on('myTankMoved', function(tankData) {
-      var player = game.currentScene.player;
-      if (player) {
-        player.x = tankData.x;
-        player.y = tankData.y;
-        player.tankRotation = tankData.rotation;
-      }
-    });
-
-    socket.on('tankDamaged', function(id, hp, pos) {
-      var player = game.currentScene.player;
-      if (player) {
-        if (id === socket.id) {
-          console.log('damaged!!!');
-          player.damaged(pos);
-          player.hp = hp;
-        }
-      }
-    });
-
-    // player or enemy
+    // tank
     socket.on('tankAdded', function(id, tank) {
+      console.log('tankAdded', id, tank);
       if (id === socket.id) {
         game.currentScene.addPlayer(tank);
       } else {
-        var em = game.currentScene.enemyManager;
-        if (em) {
-          em.add(id, tank);
-        }
-      }
-    });
-    // enemy
-    socket.on('tankMoved', function(id, tank) {
-      var em = game.currentScene.enemyManager;
-      if (em) {
-        em.move(id, tank);
-      }
-    });
-    socket.on('tankRemoved', function(id) {
-      var em = game.currentScene.enemyManager;
-      if (em) {
-        em.remove(id);
-      }
-    });
-    socket.on('tankDamaged', function(id, hp, pos) {
-      var em = game.currentScene.enemyManager;
-      if (em) {
-        var enemy = em.enemies[id];
-        if (enemy) {
-          console.log('enemy(' + id + ') is damaged');
-          enemy.hp = hp;
-          enemy.damaged(pos);
-        }
+        game.currentScene.enemyManager.add(id, tank);
       }
     });
 
+    socket.on('tankDamaged', function(id, pos, hp) {
+      if (game.currentScene.sceneName !== 'Game') return;
+      var tank = (id === socket.id ?
+                 game.currentScene.player :
+                 game.currentScene.enemyManager.enemies[id]);
+      tank.damaged(pos, hp);
+    });
+
+    socket.on('tankMoved', function(id, tankData) {
+      if (game.currentScene.sceneName !== 'Game') return;
+      var tank = (id === socket.id ?
+                 game.currentScene.player :
+                 game.currentScene.enemyManager.enemies[id]);
+      tank.move(tankData);
+    });
+
+    socket.on('tankRemoved', function(id) {
+      game.currentScene.enemyManager.remove(id);
+    });
+
     // bullet
-    socket.on('bulletAdded', function(bullet) {
-      var bm = game.currentScene.bulletManager;
-      if (bm) {
-        var position = new Vector(bullet.x, bullet.y);
-        bm.add(position, bullet.rotation, 1, bullet.id);
-      }
+    socket.on('bulletAdded', function(id, bulletData) {
+      if (game.currentScene.sceneName !== 'Game') return;
+      game.currentScene.bulletManager.addWithData(id, bulletData);
     });
-    socket.on('myBulletAdded', function(bullet) {
-      var bm = game.currentScene.bulletManager;
-      if (bm) {
-        var position = new Vector(bullet.x, bullet.y);
-        bm.add(position, bullet.rotation, 0, bullet.id);
-      }
-    });
+
     socket.on('bulletRemoved', function(bulletId) {
-      var bm = game.currentScene.bulletManager;
-      if (bm) {
-        var bullet = bm.bullets[bulletId];
-        // 既にローカルで壁にあたったりして除去されている可能性があるのでチェック
-        if (bullet) {
-          bullet.remove();
-        }
-      }
+      if (game.currentScene.sceneName !== 'Game') return;
+      game.currentScene.bulletManager.remove(bulletId);
     });
   };
   return setSocketListener;

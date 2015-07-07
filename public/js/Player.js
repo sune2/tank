@@ -36,14 +36,17 @@ define(['js/Vector', 'js/Tank'], function(Vector, Tank) {
       var moveOrRotated = false;
 
       if (this.game.input.right) {
+        // right rotation
         this.local.rotation += 200 * deltaTime;
         moveOrRotated = true;
       }
       if (this.game.input.left) {
+        // left rotation
         this.local.rotation -= 200 * deltaTime;
         moveOrRotated = true;
       }
       if (this.game.input.up) {
+        // move forward
         var direction = Vector.unit(this.local.rotation-90);
         var diff = direction.multiply(100 * deltaTime);
         if (this.canMove(diff)) {
@@ -57,6 +60,7 @@ define(['js/Vector', 'js/Tank'], function(Vector, Tank) {
         this.socket.emit('tankMoved', {x: this.local.x, y: this.local.y, rotation: this.local.rotation});
       }
 
+      // for bullet
       if (this.coolingTime > 0) {
         this.coolingTime -= deltaTime;
       } else if (this.game.input.a) {

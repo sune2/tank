@@ -10,10 +10,10 @@ var TankManager = require('./server/TankManager.js'),
     BulletManager = require('./server/BulletManager.js');
 
 var tankManager = new TankManager();
-var bulletManager = new BulletManager(tankManager, function collided(bullet, tankId, hp, pos) {
+var bulletManager = new BulletManager(tankManager, function collided(bullet, tankId, pos, hp) {
   // bullet collided with the tank of tankId
   console.log('damaged : ' + bullet.id + ' : ' + tankId + ' ' + hp);
-  io.emit('tankDamaged', tankId, hp, pos);
+  io.emit('tankDamaged', tankId, pos, hp);
   io.emit('bulletRemoved', bullet.id);
 });
 
@@ -55,6 +55,10 @@ io.on('connection', function(socket) {
   });
 
   socket.on('readyStartGame', function(){
+    if (!(socket.id in tankManager.tanks)) {
+      // 参加者以外のreadyStartGameは無視
+      return;
+    }
     readyStartGameCount++;
     console.log('readyStartGame ' + readyStartGameCount);
     if (readyStartGameCount === tankManager.size()) {
@@ -83,8 +87,7 @@ io.on('connection', function(socket) {
     setTimeout(
       function() {
         tankManager.setData(socket.id, tankData);
-        socket.broadcast.emit('tankMoved', socket.id, tankData);
-        socket.emit('myTankMoved', tankData);
+        io.emit('tankMoved', socket.id, tankData);
       }, delayTimeForDebug
     );
   });
@@ -98,8 +101,7 @@ io.on('connection', function(socket) {
   socket.on('bulletAdded', function(bulletData) {
     setTimeout(
       function() {
-        socket.broadcast.emit('bulletAdded', bulletData);
-        socket.emit('myBulletAdded', bulletData);
+        io.emit('bulletAdded', socket.id, bulletData);
         bulletManager.add(socket.id, bulletData);
       }, delayTimeForDebug
     );
