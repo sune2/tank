@@ -4,45 +4,30 @@ require(
   ['js/setSocketListener', 'js/GameScene', 'js/TitleScene'],
   function(setSocketListener, GameScene, TitleScene) {
     $(function() {
-      var socket = io.connect('');
-      var game = initGame(socket);
+      var game = initGame();
 
+      game.onload = function() {
+        var socket = io.connect('');
 
-      socket.on('connect', function() {
-        console.log('connected : ' + socket.id);
-        socket.emit('gameState');
-      });
+        socket.on('connect', function() {
+          console.log('connected : ' + socket.id);
+        });
 
-      socket.on('disconnect', function() {
-        if (game.currentScene) {
-          console.log('clear');
-          game.currentScene.clearEnemies();
-        }
-      });
-
-      socket.on('gameState', function(gameState) {
-        game.gameState = gameState;
-        if (game.isLoaded) {
+        socket.on('gameState', function(gameState) {
+          game.gameState = gameState;
           startGame(game, socket);
-        }
-        game.isConnected = true;
-      });
+        });
 
+        setSocketListener(game, socket);
+      };
 
-      setSocketListener(game, socket);
     });
 
-    function initGame(socket) {
+    function initGame() {
       var game = new enchant.Core(320, 320);
       game.preload('/images/tank.png', '/images/enemy.png', '/images/bullet.png', '/images/effect0.png', '/images/dead.png');
       game.keybind(32, 'a');
       game.keybind(81, 'b');
-      game.onload = function() {
-        if (game.isConnected) {
-          startGame(game, socket);
-        }
-        game.isLoaded = true;
-      };
       game.start();
       return game;
     }
@@ -52,13 +37,11 @@ require(
       var state = game.gameState;
       if (state === 'title') {
         game.replaceScene(new TitleScene(game, socket));
-        socket.username = prompt('名前を入力してください');
-      } else if (state === 'title-full') {
-        game.replaceScene(new TitleScene(game, socket));
       } else if (state === 'game') {
         game.replaceScene(new GameScene(game, socket));
       }
-      socket.emit('join', socket.username);
+      // Sceneを作ってから既にいる戦車情報をもらう
+      socket.emit('getTanks');
     }
   }
 );

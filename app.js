@@ -25,23 +25,18 @@ var delayTimeForDebug = heroku ? 0 : 150;
 
 io.on('connection', function(socket) {
   console.log('Client connected... : ' + socket.id);
-  for (var id in tankManager.tanks) {
-    console.log('- ' + id);
-  }
 
-  socket.on('gameState', function() {
-    if (gameState === 'title' && !tankManager.canJoin()) {
-      socket.emit('gameState', 'title-full');
-    } else {
-      socket.emit('gameState', gameState);
+  // emit game state
+  socket.emit('gameState', gameState);
+
+  socket.on('getTanks', function() {
+    for (var id in tankManager.tanks) {
+      socket.emit('tankAdded', id, tankManager.tanks[id].getData());
     }
   });
 
   socket.on('join', function(username) {
-    console.log('join');
-    for (var id in tankManager.tanks) {
-      socket.emit('tankAdded', id, tankManager.tanks[id].getData());
-    }
+    console.log('joined : ' + username);
     if (gameState === 'title' && tankManager.canJoin()) {
       var tankData = tankManager.join(socket.id, username);
       socket.emit('joinSucceeded', tankData);

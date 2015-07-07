@@ -32,11 +32,8 @@ define(['js/Player', 'js/EnemyManager', 'js/BulletManager'], function(Player, En
       this.player.hp = tankData.hp;
       this.player.name = tankData.name;
       this.addChild(this.player);
-    },
-
-    clearEnemies: function() {
-      this.enemyManager.clear();
     }
+
   });
   return GameScene;
 });

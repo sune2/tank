@@ -7,6 +7,8 @@ define(['js/Player', 'js/EnemyManager'], function(Player, EnemyManager) {
       this.game = game;
       this.socket = socket;
 
+      this.joinState = 'none';
+
       // title label
       var titleLabel = new enchant.Label();
       titleLabel.text = 'Tank Battle';
@@ -15,33 +17,38 @@ define(['js/Player', 'js/EnemyManager'], function(Player, EnemyManager) {
       titleLabel.y = 50;
       this.addChild(titleLabel);
 
-      // start label
-      var startLabel = new enchant.Label();
-      startLabel.text = 'Press Space to Start';
-      startLabel.font = '16px Consolas, "Courier New", Courier, Monaco, monospace normal';
-      startLabel.x = this.game.width / 2 - startLabel._boundWidth / 2;
-      startLabel.y = 270;
-      this.addChild(startLabel);
+      // bottom label
+      this.bottomLabel = new enchant.Label();
+      this.bottomLabel.font = '16px Consolas, "Courier New", Courier, Monaco, monospace normal';
+      this.bottomLabel.y = 270;
+      this.addChild(this.bottomLabel);
 
-
+      this.setBottomLabelText('Press Space to Join');
 
       this.tankInfo = new enchant.Group();
       this.enemyManager = new EnemyManager(this.game, this.bulletManager, this.tankInfo, this.socket);
-      // this.player = new Player(this.game, this.bulletManager, this.tankInfo, this.socket);
-      // this.player.disabled = true;
 
       this.backgroundColor = '#ffa';
       this.enemyManager.addGroupTo(this);
       this.addChild(this.tankInfo);
 
+      var self = this;
       this.on(enchant.Event.A_BUTTON_DOWN, function() {
-        console.log('space down');
-        socket.emit('startGame');
+        // スペースキーが押されたときの処理
+        if (self.joinState === 'none') {
+          var name = prompt('名前を入力してください');
+          socket.emit('join', name);
+          self.joinState = 'joining';
+        } else if (self.joinState === 'joined') {
+          socket.emit('startGame');
+        }
       });
 
     },
 
     addPlayer: function(tankData) {
+      this.joinState = 'joined';
+      this.setBottomLabelText('Press Space to Start');
       if (this.player) {
         this.removeChild(this.player);
       }
@@ -55,8 +62,10 @@ define(['js/Player', 'js/EnemyManager'], function(Player, EnemyManager) {
       this.addChild(this.player);
     },
 
-    clearEnemies: function() {
-      this.enemyManager.clear();
+
+    setBottomLabelText: function(text) {
+      this.bottomLabel.text = text;
+      this.bottomLabel.x = this.game.width / 2 - this.bottomLabel._boundWidth / 2;
     }
 
   });

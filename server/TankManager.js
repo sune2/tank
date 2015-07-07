@@ -22,6 +22,10 @@ TankManager.prototype.getTitlePositionX = function(idx) {
 };
 
 TankManager.prototype.join = function(socketId, username) {
+  if (this.tanks[socketId]) {
+    // 何らかの理由で既にいるsocketIdなら最初に削除する
+    this.remove(socketId);
+  }
   var idx;
   for (idx = 0; idx < 4; ++idx) {
     if (!this.tankExist[idx]) {
@@ -41,10 +45,6 @@ TankManager.prototype.join = function(socketId, username) {
   this.add(socketId, tankData);
   this.tankExist[tankData.idx] = true;
   return tankData;
-};
-
-TankManager.prototype.add = function(socketId, tankData) {
-  this.tanks[socketId] = new Tank(tankData);
 };
 
 TankManager.prototype.add = function(socketId, tankData) {
