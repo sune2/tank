@@ -10,6 +10,7 @@ require(
 
       socket.on('connect', function() {
         console.log('connected : ' + socket.id);
+        socket.username = prompt('名前を入力してください');
         game.isConnected = true;
         if (game.isLoaded) {
           emitTankAdded(socket, game);
@@ -47,8 +48,10 @@ require(
         x: player.x,
         y: player.y,
         rotation: player.tankRotation,
-        hp: player.hp
+        hp: player.hp,
+        name: socket.username
       });
+      player.name = socket.username;
     }
   }
 );

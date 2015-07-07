@@ -28,6 +28,7 @@ define(['js/HPBar', 'js/Effect'], function(HPBar, Effect) {
       this._hp = this.maxHP;
       this.hp = this.maxHP;
       this.isDead = false;
+      this.name = 'anonymous';
     },
 
     setTankImage: function(image) {

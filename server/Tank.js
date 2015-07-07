@@ -25,6 +25,9 @@ Tank.prototype.setData = function(tankData) {
   if (tankData.hp) {
     this.hp = tankData.hp;
   }
+  if (tankData.name) {
+    this.name = tankData.name;
+  }
 };
 
 Tank.prototype.getData = function() {
@@ -32,7 +35,8 @@ Tank.prototype.getData = function() {
     x: this.x,
     y: this.y,
     rotation: this.rotation,
-    hp: this.hp
+    hp: this.hp,
+    name: this.name
   };
 };
 

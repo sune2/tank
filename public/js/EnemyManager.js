@@ -18,6 +18,9 @@ define(['js/Enemy'], function(Enemy) {
     if (enemyData.hp) {
       enemy.hp = enemyData.hp;
     }
+    if (enemyData.name) {
+      enemy.name = enemyData.name;
+    }
     this.group.addChild(enemy);
     this.enemies[id] = enemy;
     var self = this;
