@@ -7,6 +7,12 @@ define(['js/TitleScene', 'js/GameScene','js/Vector'], function(TitleScene, GameS
       game.currentScene.addPlayer(tankData);
     });
 
+    socket.on('joinFailed', function() {
+      var scene = game.currentScene;
+      if (scene.sceneName !== 'Title') return;
+      game.currentScene.joinFailed();
+    });
+
     // start game
     socket.on('startGame', function() {
       var gameScene = new GameScene(game, socket);

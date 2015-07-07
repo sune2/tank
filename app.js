@@ -41,6 +41,8 @@ io.on('connection', function(socket) {
       var tankData = tankManager.join(socket.id, username);
       socket.emit('joinSucceeded', tankData);
       socket.broadcast.emit('tankAdded',  socket.id, tankData);
+    } else {
+      socket.emit('joinFailed');
     }
   });
 

@@ -7,7 +7,6 @@ define(['js/Player', 'js/EnemyManager'], function(Player, EnemyManager) {
       this.game = game;
       this.socket = socket;
 
-      this.joinState = 'none';
 
       // title label
       var titleLabel = new enchant.Label();
@@ -23,8 +22,6 @@ define(['js/Player', 'js/EnemyManager'], function(Player, EnemyManager) {
       this.bottomLabel.y = 270;
       this.addChild(this.bottomLabel);
 
-      this.setBottomLabelText('Press Space to Join');
-
       this.tankInfo = new enchant.Group();
       this.enemyManager = new EnemyManager(this.game, this.bulletManager, this.tankInfo, this.socket);
 
@@ -32,23 +29,33 @@ define(['js/Player', 'js/EnemyManager'], function(Player, EnemyManager) {
       this.enemyManager.addGroupTo(this);
       this.addChild(this.tankInfo);
 
+      this.setStatus('canJoin');
+
       var self = this;
       this.on(enchant.Event.A_BUTTON_DOWN, function() {
         // スペースキーが押されたときの処理
-        if (self.joinState === 'none') {
+        if (self.status === 'canJoin') {
           var name = prompt('名前を入力してください');
+          if (name === null || name === undefined) {
+            return;
+          }
           socket.emit('join', name);
-          self.joinState = 'joining';
-        } else if (self.joinState === 'joined') {
+          self.setStatus('joining');
+        } else if (self.status === 'joined') {
           socket.emit('startGame');
         }
       });
 
     },
 
+    joinFailed: function() {
+      this.setStatus('canJoin');
+      alert('参加に失敗しました');
+    },
+
     addPlayer: function(tankData) {
-      this.joinState = 'joined';
-      this.setBottomLabelText('Press Space to Start');
+      this.setStatus('joined');
+
       if (this.player) {
         this.removeChild(this.player);
       }
@@ -62,10 +69,22 @@ define(['js/Player', 'js/EnemyManager'], function(Player, EnemyManager) {
       this.addChild(this.player);
     },
 
-
     setBottomLabelText: function(text) {
       this.bottomLabel.text = text;
       this.bottomLabel.x = this.game.width / 2 - this.bottomLabel._boundWidth / 2;
+    },
+
+    setStatus: function(status) {
+      this.status = status;
+      if (status === 'none') {
+        this.setBottomLabelText('');
+      } else if (status === 'canJoin') {
+        this.setBottomLabelText('Press Space to Join');
+      } else if (status === 'joining') {
+        this.setBottomLabelText('Joining...');
+      } else if (status === 'joined') {
+        this.setBottomLabelText('Press Space to Start');
+      }
     }
 
   });
