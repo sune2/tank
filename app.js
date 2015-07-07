@@ -29,15 +29,20 @@ io.on('connection', function(socket) {
     console.log('- ' + id);
   }
 
-  socket.on('join', function(username) {
-    if (gameState !== 'title') {
-      return;
+  socket.on('gameState', function() {
+    if (gameState === 'title' && !tankManager.canJoin()) {
+      socket.emit('gameState', 'title-full');
+    } else {
+      socket.emit('gameState', gameState);
     }
+  });
+
+  socket.on('join', function(username) {
     console.log('join');
     for (var id in tankManager.tanks) {
       socket.emit('tankAdded', id, tankManager.tanks[id].getData());
     }
-    if (tankManager.canJoin()) {
+    if (gameState === 'title' && tankManager.canJoin()) {
       var tankData = tankManager.join(socket.id, username);
       socket.emit('joinSucceeded', tankData);
       socket.broadcast.emit('tankAdded',  socket.id, tankData);

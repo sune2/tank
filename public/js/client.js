@@ -10,18 +10,24 @@ require(
 
       socket.on('connect', function() {
         console.log('connected : ' + socket.id);
-        socket.username = prompt('名前を入力してください');
-        game.isConnected = true;
-        if (game.isLoaded) {
-          emitJoin(socket);
-        }
+        socket.emit('gameState');
       });
+
       socket.on('disconnect', function() {
         if (game.currentScene) {
           console.log('clear');
           game.currentScene.clearEnemies();
         }
       });
+
+      socket.on('gameState', function(gameState) {
+        game.gameState = gameState;
+        if (game.isLoaded) {
+          startGame(game, socket);
+        }
+        game.isConnected = true;
+      });
+
 
       setSocketListener(game, socket);
     });
@@ -32,20 +38,26 @@ require(
       game.keybind(32, 'a');
       game.keybind(81, 'b');
       game.onload = function() {
-        var titleScene = new TitleScene(game, socket);
-        game.replaceScene(titleScene);
-        // var gameScene = new GameScene(game, socket);
-        // game.replaceScene(gameScene);
-        game.isLoaded = true;
         if (game.isConnected) {
-          emitJoin(socket);
+          startGame(game, socket);
         }
+        game.isLoaded = true;
       };
       game.start();
       return game;
     }
 
-    function emitJoin(socket) {
+    // ゲームのロードが終わってサーバからゲーム状況を受け取ったあとに呼ばれる
+    function startGame(game, socket) {
+      var state = game.gameState;
+      if (state === 'title') {
+        game.replaceScene(new TitleScene(game, socket));
+        socket.username = prompt('名前を入力してください');
+      } else if (state === 'title-full') {
+        game.replaceScene(new TitleScene(game, socket));
+      } else if (state === 'game') {
+        game.replaceScene(new GameScene(game, socket));
+      }
       socket.emit('join', socket.username);
     }
   }
