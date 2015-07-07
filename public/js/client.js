@@ -51,7 +51,9 @@ require(
         hp: player.hp,
         name: socket.username
       });
-      player.name = socket.username;
+      if (socket.username) {
+        player.name = socket.username;
+      }
     }
   }
 );

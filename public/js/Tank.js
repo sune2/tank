@@ -1,4 +1,4 @@
-define(['js/HPBar', 'js/Effect'], function(HPBar, Effect) {
+define(['js/HPBar', 'js/NameBar' , 'js/Effect'], function(HPBar, NameBar, Effect) {
   var Tank = enchant.Class.create(enchant.Group, {
     initialize: function(game, x, y, tankRotation, bulletManager, tankInfo) {
       enchant.Group.call(this);
@@ -21,6 +21,12 @@ define(['js/HPBar', 'js/Effect'], function(HPBar, Effect) {
       this.hpBar.myOffSetX = this.width / 2 - this.hpBar.width / 2;
       this.hpBar.myOffSetY = -15;
       this.tankInfo.addChild(this.hpBar);
+
+      // name bar
+      this.nameBar = new NameBar();
+      this.nameBar.myOffSetX = this.width / 2;
+      this.nameBar.myOffSetY = 40;
+      this.tankInfo.addChild(this.nameBar);
 
       this.x = x;
       this.y = y;
@@ -52,6 +58,7 @@ define(['js/HPBar', 'js/Effect'], function(HPBar, Effect) {
       set: function(x) {
         this._x = x;
         this.hpBar.x = x + this.hpBar.myOffSetX;
+        this.nameBar.x = x + this.nameBar.myOffSetX;
         this._dirty = true;
       }
     },
@@ -63,6 +70,7 @@ define(['js/HPBar', 'js/Effect'], function(HPBar, Effect) {
       set: function(y) {
         this._y = y;
         this.hpBar.y = y + this.hpBar.myOffSetY;
+        this.nameBar.y = y + this.nameBar.myOffSetY;
         this._dirty = true;
       }
     },
@@ -81,9 +89,22 @@ define(['js/HPBar', 'js/Effect'], function(HPBar, Effect) {
       }
     },
 
+    name: {
+      get: function() {
+        return this._name;
+      },
+      set: function(name) {
+        this._name = name;
+        this.nameBar.name = name;
+      }
+    },
+
+
     remove: function() {
       this.tankInfo.removeChild(this.hpBar);
+      this.tankInfo.removeChild(this.nameBar);
       this.parentNode.removeChild(this);
+
     },
 
     damaged: function(pos) {
