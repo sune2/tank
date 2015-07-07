@@ -48,6 +48,7 @@ io.on('connection', function(socket) {
     if (gameState === 'title') {
       io.emit('startGame');
       gameState = 'game';
+      tankManager.setGamePosition();
     }
   });
 

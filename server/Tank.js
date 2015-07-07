@@ -22,13 +22,13 @@ Tank.prototype.setData = function(tankData) {
   this.x = tankData.x;
   this.y = tankData.y;
   this.rotation = tankData.rotation;
-  if (tankData.hp) {
+  if (tankData.hp !== undefined) {
     this.hp = tankData.hp;
   }
-  if (tankData.name) {
+  if (tankData.name !== undefined) {
     this.name = tankData.name;
   }
-  if (tankData.idx) {
+  if (tankData.idx !== undefined) {
     this.idx = tankData.idx;
   }
 };

@@ -26,9 +26,8 @@ define(['js/Player', 'js/EnemyManager', 'js/BulletManager'], function(Player, En
       if (this.player) {
         this.removeChild(this.player);
       }
-      this.player = new Player(this.game, this.bulletManager, this.tankInfo, this.socket);
-      this.player.x = tankData.x;
-      this.player.y = tankData.y;
+      this.player = new Player(this.game, tankData.x, tankData.y, tankData.rotation,
+                               this.bulletManager, this.tankInfo, this.socket);
       this.player.tankRotation = tankData.rotation;
       this.player.hp = tankData.hp;
       this.player.name = tankData.name;

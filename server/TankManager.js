@@ -28,6 +28,7 @@ TankManager.prototype.join = function(socketId, username) {
       break;
     }
   }
+  console.log('joined : ' + idx);
   var x = this.getTitlePositionX(idx);
   var tankData = {
     x: x,
@@ -68,6 +69,37 @@ TankManager.prototype.damaged = function(socketId) {
     return --this.tanks[socketId].hp;
   }
   return -1;
+};
+
+TankManager.prototype.setGamePosition = function() {
+  var W = 320;
+  var H = 320;
+  var w = 22;
+  var h = 32;
+  var margin = 40;
+  for (var id in this.tanks) {
+    var tank = this.tanks[id];
+    var idx = tank.idx;
+    if (idx === 0) {
+      tank.x = margin - w/2;
+      tank.y = margin - h/2;
+      tank.rotation = 135;
+    } else if (idx === 1) {
+      tank.x = W - margin - w/2;
+      tank.y = H - margin - h/2;
+      tank.rotation = 315;
+    } else if (idx === 2) {
+      tank.x = W - margin - w/2;
+      tank.y = margin - h/2;
+      tank.rotation = 225;
+    } else {
+      tank.x = margin - w/2;
+      tank.y = H - margin - h/2;
+      tank.rotation = 45;
+    }
+    console.log(idx);
+    console.log(tank);
+  }
 };
 
 TankManager.prototype.setTitlePosition = function() {
