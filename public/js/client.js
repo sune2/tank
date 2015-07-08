@@ -1,8 +1,8 @@
 enchant();
 
 require(
-  ['js/setSocketListener', 'js/GameScene', 'js/TitleScene'],
-  function(setSocketListener, GameScene, TitleScene) {
+  ['js/Common', 'js/setSocketListener', 'js/GameScene', 'js/TitleScene'],
+  function(Common, setSocketListener, GameScene, TitleScene) {
     $(function() {
       var game = initGame();
 
@@ -24,8 +24,12 @@ require(
     });
 
     function initGame() {
-      var game = new enchant.Core(320, 320);
-      game.preload('/images/tank.png', '/images/enemy.png', '/images/bullet.png', '/images/effect0.png', '/images/dead.png');
+      var game = new enchant.Core(Common.screen.width, Common.screen.height);
+      game.preload(Common.player.imageName,
+                   Common.tank.deadImageName,
+                   Common.enemy.imageName,
+                   Common.effect.imageName,
+                   Common.bullet.imageName);
       game.keybind(32, 'a');
       game.keybind(81, 'b');
       game.start();

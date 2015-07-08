@@ -1,19 +1,12 @@
-define([], function() {
-  // var NameBar = enchant.Class.create(enchant.Sprite, {
-  //   initialize: function() {
-  //     enchant.Sprite.call(this, 10, 10);
-  //     this.backgroundColor = 'blue';
-  //   },
-  // });
-
+define(['js/Common'], function(Common) {
   var NameBar = enchant.Class.create(enchant.Group, {
     initialize: function() {
       enchant.Group.call(this);
 
-      this.fontSize = 10;
+      this.fontSize = Common.tank.nameBar.fontSize;
 
 
-      this.back = new enchant.Sprite(30,this.fontSize+4);
+      this.back = new enchant.Sprite(0,0);
       this.back.backgroundColor = 'rgba(0,0,0,0.7)';
       this.addChild(this.back);
 

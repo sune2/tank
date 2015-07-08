@@ -1,8 +1,8 @@
-define(['js/Vector', 'js/Tank'], function(Vector, Tank) {
+define(['js/Common', 'js/Vector', 'js/Tank'], function(Common, Vector, Tank) {
   var Player = enchant.Class.create(Tank, {
     initialize: function(game, x, y, rotation, bulletManager, tankInfo, socket) {
       Tank.call(this, game, x, y, rotation, bulletManager, tankInfo);
-      this.setTankImage(game.assets['/images/tank.png']);
+      this.setTankImage(game.assets[Common.player.imageName]);
       this.socket = socket;
 
       // ローカルでの状態
@@ -37,18 +37,18 @@ define(['js/Vector', 'js/Tank'], function(Vector, Tank) {
 
       if (this.game.input.right) {
         // right rotation
-        this.local.rotation += 200 * deltaTime;
+        this.local.rotation += Common.player.rotationSpeed * deltaTime;
         moveOrRotated = true;
       }
       if (this.game.input.left) {
         // left rotation
-        this.local.rotation -= 200 * deltaTime;
+        this.local.rotation -= Common.player.rotationSpeed * deltaTime;
         moveOrRotated = true;
       }
       if (this.game.input.up) {
         // move forward
         var direction = Vector.unit(this.local.rotation-90);
-        var diff = direction.multiply(100 * deltaTime);
+        var diff = direction.multiply(Common.player.speed * deltaTime);
         if (this.canMove(diff)) {
           this.local.x += diff.x;
           this.local.y += diff.y;
@@ -70,7 +70,7 @@ define(['js/Vector', 'js/Tank'], function(Vector, Tank) {
         var bulletPosition = new Vector(0, this.height/2).rotate(-rot);
         bulletPosition = bulletPosition.add(center);
         this.bulletManager.addLocal(bulletPosition, rot, 0);
-        this.coolingTime = 1;
+        this.coolingTime = Common.player.coolingTime;
       }
     },
 

@@ -1,10 +1,10 @@
-define(['js/Vector'], function(Vector) {
+define(['js/Common', 'js/Vector'], function(Common, Vector) {
   var Bullet = enchant.Class.create(enchant.Sprite, {
     /*
      type : 0 (player's bullet)  1 (enemy's bullet)
      */
     initialize: function(game, id, position, rotation, type) {
-      enchant.Sprite.call(this, 4, 16);
+      enchant.Sprite.call(this, Common.bullet.width, Common.bullet.height);
       this.game = game;
       this.id = id;
       this.x = position.x - this.width/2;
@@ -12,7 +12,7 @@ define(['js/Vector'], function(Vector) {
       this.rotation = rotation;
       this.type = type;
 
-      this.image = game.assets['/images/bullet.png'];
+      this.image = game.assets[Common.bullet.imageName];
 
       var bullet = this;
       var previousTime = +new Date();
@@ -22,7 +22,7 @@ define(['js/Vector'], function(Vector) {
         previousTime = currentTime;
 
         var direction = Vector.unit(bullet.rotation-90);
-        var diff = direction.multiply(150 * deltaTime);
+        var diff = direction.multiply(Common.bullet.speed * deltaTime);
         bullet.moveBy(diff.x, diff.y);
 
         var center = bullet.getCenter();

@@ -1,17 +1,17 @@
-define(['js/HPBar', 'js/NameBar' , 'js/Effect'], function(HPBar, NameBar, Effect) {
+define(['js/Common', 'js/HPBar', 'js/NameBar' , 'js/Effect'], function(Common, HPBar, NameBar, Effect) {
   var Tank = enchant.Class.create(enchant.Group, {
     initialize: function(game, x, y, tankRotation, bulletManager, tankInfo) {
       enchant.Group.call(this);
-      this.width = 22;
-      this.height = 32;
+      this.width = Common.tank.width;
+      this.height = Common.tank.height;
 
       this.game = game;
       this.bulletManager = bulletManager;
       this.tankInfo = tankInfo;
-      this.maxHP = 10;
+      this.maxHP = Common.tank.maxHP;
 
       // tank sprite
-      this.tankSprite = new enchant.Sprite(22, 32);
+      this.tankSprite = new enchant.Sprite(this.width, this.height);
       this.tankSprite.x = 0;
       this.tankSprite.y = 0;
       this.addChild(this.tankSprite);
@@ -19,13 +19,13 @@ define(['js/HPBar', 'js/NameBar' , 'js/Effect'], function(HPBar, NameBar, Effect
       // hp bar
       this.hpBar = new HPBar(this.maxHP);
       this.hpBar.myOffSetX = this.width / 2 - this.hpBar.width / 2;
-      this.hpBar.myOffSetY = -15;
+      this.hpBar.myOffSetY = Common.tank.hpBar.offsetY;
       this.tankInfo.addChild(this.hpBar);
 
       // name bar
       this.nameBar = new NameBar();
       this.nameBar.myOffSetX = this.width / 2;
-      this.nameBar.myOffSetY = 40;
+      this.nameBar.myOffSetY = Common.tank.nameBar.offsetY;
       this.tankInfo.addChild(this.nameBar);
 
       this.x = x;
@@ -123,7 +123,7 @@ define(['js/HPBar', 'js/NameBar' , 'js/Effect'], function(HPBar, NameBar, Effect
     },
 
     die: function() {
-      this.setTankImage(this.game.assets['/images/dead.png']);
+      this.setTankImage(this.game.assets[Common.tank.deadImageName]);
       this.isDead = true;
     }
   });
