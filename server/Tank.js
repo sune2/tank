@@ -1,19 +1,25 @@
 var Vector = require(__dirname + '/Vector'),
-    Segment = require(__dirname + '/Segment');
+    Segment = require(__dirname + '/Segment'),
+    Common = require(__dirname + '/Common');
 
 var Tank = function(tankData) {
   this.setData(tankData);
 };
 
 Tank.prototype.getSegments = function() {
-  var ps = [[2, 3], [19, 3], [19, 32], [2, 32]];
+  var center = new Vector(Common.tank.width / 2, Common.tank.height / 2);
+  var rot = this.rotation;
+  var pos = new Vector(this.x, this.y);
+  var ps = Common.tankVertices.map(function(pointArray) {
+    // 回転
+    var p = new Vector(pointArray[0], pointArray[1]);
+    return p.subtract(center).rotate(rot).add(center).add(pos);
+  });
+
+  var n = ps.length;
   var res = [];
-  for (var i = 0; i < 4; ++i) {
-    var x = this.x + ps[i][0];
-    var y = this.y + ps[i][1];
-    var nx = this.x + ps[(i+1)%4][0];
-    var ny = this.y + ps[(i+1)%4][1];
-    res.push(new Segment(new Vector(x, y), new Vector(nx, ny)));
+  for (var i = 0; i < n; ++i) {
+    res.push(new Segment(ps[i], ps[(i+1)%n]));
   }
   return res;
 };
@@ -31,6 +37,7 @@ Tank.prototype.setData = function(tankData) {
   if (tankData.idx !== undefined) {
     this.idx = tankData.idx;
   }
+  this.getSegments();
 };
 
 Tank.prototype.getData = function() {

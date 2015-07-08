@@ -29,7 +29,7 @@ Vector.prototype.multiply = function(k) {
 Vector.prototype.rotate = function(angle) {
   angle = angle * Math.PI / 180;
   return new Vector(Math.cos(angle) * this.x - Math.sin(angle) * this.y,
-                    Math.sin(angle) * this.x - Math.cos(angle) * this.y);
+                    Math.sin(angle) * this.x + Math.cos(angle) * this.y);
 };
 Vector.prototype.distance = function(p) {
   return this.subtract(p).magnitude();

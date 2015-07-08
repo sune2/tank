@@ -1,8 +1,9 @@
-var Tank = require(__dirname + '/Tank');
+var Tank = require(__dirname + '/Tank'),
+    Common = require(__dirname + '/Common');
 
 var TankManager = function() {
   this.tanks = {};
-  this.tankExist = new Array(4);
+  this.tankExist = new Array(Common.title.maxTank);
 };
 
 TankManager.prototype.size = function() {
@@ -10,13 +11,13 @@ TankManager.prototype.size = function() {
 };
 
 TankManager.prototype.canJoin = function() {
-  return this.size() < 4;
+  return this.size() < Common.title.maxTank;
 };
 
 TankManager.prototype.getTitlePositionX = function(idx) {
-  var width = 320;
-  var margin = 70;
-  var tankWidth = 22;
+  var width = Common.screen.width;
+  var margin = Common.title.margin;
+  var tankWidth = Common.tank.width;
   var x = idx * margin + width / 2 - margin * 1.5 - tankWidth / 2;
   return x;
 };
@@ -27,7 +28,7 @@ TankManager.prototype.join = function(socketId, username) {
     this.remove(socketId);
   }
   var idx;
-  for (idx = 0; idx < 4; ++idx) {
+  for (idx = 0; idx < Common.title.maxTank; ++idx) {
     if (!this.tankExist[idx]) {
       break;
     }
@@ -36,9 +37,9 @@ TankManager.prototype.join = function(socketId, username) {
   var x = this.getTitlePositionX(idx);
   var tankData = {
     x: x,
-    y: 180,
+    y: Common.title.tankY,
     rotation: 0,
-    hp: 10,
+    hp: Common.tank.maxHP,
     name: username,
     idx: idx
   };
@@ -72,11 +73,11 @@ TankManager.prototype.damaged = function(socketId) {
 };
 
 TankManager.prototype.setGamePosition = function() {
-  var W = 320;
-  var H = 320;
-  var w = 22;
-  var h = 32;
-  var margin = 40;
+  var W = Common.screen.width;
+  var H = Common.screen.height;
+  var w = Common.tank.width;
+  var h = Common.tank.height;
+  var margin = Common.game.startPositionMargin;
   for (var id in this.tanks) {
     var tank = this.tanks[id];
     var idx = tank.idx;
@@ -106,9 +107,9 @@ TankManager.prototype.setTitlePosition = function() {
   for (var id in this.tanks) {
     var tank = this.tanks[id];
     tank.x = this.getTitlePositionX(tank.idx);
-    tank.y = 180;
+    tank.y = Common.title.tankY;
     tank.rotation = 0;
-    tank.hp = 10;
+    tank.hp = Common.tank.maxHP;
   }
 };
 
