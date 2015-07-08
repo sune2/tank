@@ -20,9 +20,6 @@ var bulletManager = new BulletManager(tankManager, function collided(bullet, tan
 var gameState = 'title';
 var readyStartGameCount = 0;
 
-var heroku = !!process.env.PORT;
-var delayTimeForDebug = heroku ? 0 : 150;
-
 io.on('connection', function(socket) {
   console.log('Client connected... : ' + socket.id);
 
@@ -84,13 +81,9 @@ io.on('connection', function(socket) {
   });
 
   socket.on('tankMoved', function(tankData) {
-    setTimeout(
-      function() {
-        if (gameState !== 'game') return;
-        tankManager.setData(socket.id, tankData);
-        io.emit('tankMoved', socket.id, tankData);
-      }, delayTimeForDebug
-    );
+    if (gameState !== 'game') return;
+    tankManager.setData(socket.id, tankData);
+    io.emit('tankMoved', socket.id, tankData);
   });
 
   socket.on('disconnect', function() {
@@ -100,12 +93,8 @@ io.on('connection', function(socket) {
   });
 
   socket.on('bulletAdded', function(bulletData) {
-    setTimeout(
-      function() {
-        io.emit('bulletAdded', socket.id, bulletData);
-        bulletManager.add(socket.id, bulletData);
-      }, delayTimeForDebug
-    );
+    io.emit('bulletAdded', socket.id, bulletData);
+    bulletManager.add(socket.id, bulletData);
   });
 
 });
