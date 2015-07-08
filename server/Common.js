@@ -13,7 +13,8 @@ var common = {
   ],
   bullet: {
     width: 4,
-    height: 16
+    height: 16,
+    speed: 150
   },
   bulletSegment: [
     [2,8], [2,0]

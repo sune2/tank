@@ -9,7 +9,7 @@ var Tank = function(tankData) {
 Tank.prototype.getSegments = function() {
   var center = new Vector(Common.tank.width / 2, Common.tank.height / 2);
   var rot = this.rotation;
-  var pos = new Vector(this.x, this.y);
+  var pos = this.position;
   var ps = Common.tankVertices.map(function(pointArray) {
     // 回転
     var p = new Vector(pointArray[0], pointArray[1]);
@@ -25,8 +25,7 @@ Tank.prototype.getSegments = function() {
 };
 
 Tank.prototype.setData = function(tankData) {
-  this.x = tankData.x;
-  this.y = tankData.y;
+  this.position = new Vector(tankData.x, tankData.y);
   this.rotation = tankData.rotation;
   if (tankData.hp !== undefined) {
     this.hp = tankData.hp;
@@ -42,8 +41,8 @@ Tank.prototype.setData = function(tankData) {
 
 Tank.prototype.getData = function() {
   return {
-    x: this.x,
-    y: this.y,
+    x: this.position.x,
+    y: this.position.y,
     rotation: this.rotation,
     hp: this.hp,
     name: this.name

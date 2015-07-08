@@ -1,4 +1,5 @@
-var Tank = require(__dirname + '/Tank'),
+var Vector = require(__dirname + '/Vector'),
+    Tank = require(__dirname + '/Tank'),
     Common = require(__dirname + '/Common');
 
 var TankManager = function() {
@@ -82,24 +83,18 @@ TankManager.prototype.setGamePosition = function() {
     var tank = this.tanks[id];
     var idx = tank.idx;
     if (idx === 0) {
-      tank.x = margin - w/2;
-      tank.y = margin - h/2;
+      tank.position = new Vector(margin - w/2, margin - h/2);
       tank.rotation = 135;
     } else if (idx === 1) {
-      tank.x = W - margin - w/2;
-      tank.y = H - margin - h/2;
+      tank.position = new Vector(W - margin - w/2, H - margin - h/2);
       tank.rotation = 315;
     } else if (idx === 2) {
-      tank.x = W - margin - w/2;
-      tank.y = margin - h/2;
+      tank.position = new Vector(W - margin - w/2, margin - h/2);
       tank.rotation = 225;
     } else {
-      tank.x = margin - w/2;
-      tank.y = H - margin - h/2;
+      tank.position = new Vector(margin - w/2, H - margin - h/2);
       tank.rotation = 45;
     }
-    console.log(idx);
-    console.log(tank);
   }
 };
 
