@@ -58,7 +58,7 @@ io.on('connection', function(socket) {
     }
     readyStartGameCount++;
     console.log('readyStartGame ' + readyStartGameCount);
-    if (readyStartGameCount === tankManager.size()) {
+    if (readyStartGameCount >= tankManager.size()) {
       readyStartGameCount = 0;
       for (var id in tankManager.tanks) {
         io.emit('tankAdded', id, tankManager.tanks[id].getData());
