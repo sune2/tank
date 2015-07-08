@@ -101,8 +101,8 @@ TankManager.prototype.setGamePosition = function() {
 TankManager.prototype.setTitlePosition = function() {
   for (var id in this.tanks) {
     var tank = this.tanks[id];
-    tank.x = this.getTitlePositionX(tank.idx);
-    tank.y = Common.title.tankY;
+    tank.position = new Vector(this.getTitlePositionX(tank.idx),
+                               Common.title.tankY);
     tank.rotation = 0;
     tank.hp = Common.tank.maxHP;
   }
