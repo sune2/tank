@@ -1,6 +1,6 @@
-var Vector = require(__dirname + '/Vector'),
-    Segment = require(__dirname + '/Segment'),
-    Common = require(__dirname + '/Common');
+var Vector = require('./Vector'),
+    Segment = require('./Segment'),
+    Common = require('./Common');
 
 var Bullet = function(owner, bulletData, manager) {
   this.width = Common.bullet.width;

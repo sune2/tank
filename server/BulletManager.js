@@ -1,6 +1,6 @@
-var Vector = require(__dirname + '/Vector'),
-    Segment = require(__dirname + '/Segment'),
-    Bullet = require(__dirname + '/Bullet');
+var Vector = require('./Vector'),
+    Segment = require('./Segment'),
+    Bullet = require('./Bullet');
 
 var BulletManager = function(tankManager, collidedCallbak) {
   this.tankManager = tankManager;

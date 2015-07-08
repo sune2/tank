@@ -1,5 +1,5 @@
 // segment class
-var Vector = require(__dirname + '/Vector');
+var Vector = require('./Vector');
 
 var Segment = function(p1, p2) {
   this.p1 = p1;

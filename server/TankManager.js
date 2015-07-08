@@ -1,6 +1,6 @@
-var Vector = require(__dirname + '/Vector'),
-    Tank = require(__dirname + '/Tank'),
-    Common = require(__dirname + '/Common');
+var Vector = require('./Vector'),
+    Tank = require('./Tank'),
+    Common = require('./Common');
 
 var TankManager = function() {
   this.tanks = {};
