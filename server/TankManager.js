@@ -34,7 +34,6 @@ TankManager.prototype.join = function(socketId, username) {
       break;
     }
   }
-  console.log('joined : ' + idx);
   var x = this.getTitlePositionX(idx);
   var tankData = {
     x: x,
