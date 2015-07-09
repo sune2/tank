@@ -50,6 +50,7 @@ TankManager.prototype.join = function(socketId, username) {
 
 TankManager.prototype.add = function(socketId, tankData) {
   this.tanks[socketId] = new Tank(tankData);
+  this.tanks[socketId].id = socketId;
 };
 
 TankManager.prototype.setData = function(socketId, tankData) {
@@ -63,13 +64,6 @@ TankManager.prototype.remove = function(socketId) {
     this.tankExist[tank.idx] = false;
   }
   delete this.tanks[socketId];
-};
-
-TankManager.prototype.damaged = function(socketId) {
-  if (this.tanks[socketId]) {
-    return --this.tanks[socketId].hp;
-  }
-  return -1;
 };
 
 TankManager.prototype.setGamePosition = function() {

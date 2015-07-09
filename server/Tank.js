@@ -49,4 +49,8 @@ Tank.prototype.getData = function() {
   };
 };
 
+Tank.prototype.damaged = function() {
+  this.hp--;
+};
+
 module.exports = Tank;

@@ -7,15 +7,27 @@ app.use(express.static('public'));
 
 
 var TankManager = require('./server/TankManager.js'),
-    BulletManager = require('./server/BulletManager.js');
+    BulletManager = require('./server/BulletManager.js'),
+    CollisionChecker = require('./server/CollisionChecker.js');
 
 var tankManager = new TankManager();
-var bulletManager = new BulletManager(tankManager, function collided(bullet, tankId, pos, hp) {
-  // bullet collided with the tank of tankId
-  console.log('damaged : ' + bullet.id + ' : ' + tankId + ' ' + hp);
-  io.emit('tankDamaged', tankId, pos, hp);
-  io.emit('bulletRemoved', bullet.id);
-});
+var bulletManager = new BulletManager();
+var collisionChecker = new CollisionChecker(tankManager, bulletManager);
+
+// game main loop
+var previousTime = +new Date();
+setInterval(function() {
+  var currentTime = +new Date();
+  var deltaTime = (currentTime - previousTime) / 1000;
+  previousTime = currentTime;
+  bulletManager.update(deltaTime);
+  collisionChecker.check(function(tank, bullet, pos) {
+    io.emit('tankDamaged', tank.id, pos, tank.hp);
+    io.emit('bulletRemoved', bullet.id);
+  });
+}, 33);
+
+
 
 var gameState = 'title';
 var readyStartGameCount = 0;

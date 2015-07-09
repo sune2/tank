@@ -1,19 +1,11 @@
 var expect = require('expect.js');
 var BulletManager = require('../server/BulletManager.js');
 
-var TankManager = require('../server/TankManager.js');
-
-
 describe('BulletManager', function() {
-  var tankManager;
   var bulletManager;
 
-  before(function() {
-    tankManager = new TankManager();
-  });
-
   beforeEach(function() {
-    bulletManager = new BulletManager(tankManager, function(){});
+    bulletManager = new BulletManager();
   });
 
   describe('new', function() {
