@@ -4,6 +4,16 @@ var expect = require('expect.js');
 describe('Tank server', function() {
   var socket;
 
+  before(function(done) {
+    socket = io('http://localhost:3000', {'force new connection': true});
+    socket.on('connect', function() {
+      socket.close();
+      done();
+    });
+    socket.on('connect_error', function() {
+      expect().fail('start server in advance.');
+    });
+  });
   beforeEach(function() {
     socket = io('http://localhost:3000', {'force new connection': true});
   });
