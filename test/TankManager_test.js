@@ -67,23 +67,21 @@ describe('TankManager', function() {
     it('should arrange all tanks for starting game', function() {
       var W = Common.screen.width;
       var H = Common.screen.height;
-      var w = Common.tank.width;
-      var h = Common.tank.height;
       var margin = Common.game.startPositionMargin;
       for (var id in tankManager.tanks) {
         var tank = tankManager.tanks[id];
         var idx = tank.idx;
         if (idx === 0) {
-          expect(tank.position).to.eql(new Vector(margin - w/2, margin - h/2));
+          expect(tank.position).to.eql(new Vector(margin, margin));
           expect(tank.rotation).to.be(135);
         } else if (idx === 1) {
-          expect(tank.position).to.eql(new Vector(W - margin - w/2, H - margin - h/2));
+          expect(tank.position).to.eql(new Vector(W - margin, H - margin));
           expect(tank.rotation).to.be(315);
         } else if (idx === 2) {
-          expect(tank.position).to.eql(new Vector(W - margin - w/2, margin - h/2));
+          expect(tank.position).to.eql(new Vector(W - margin, margin));
           expect(tank.rotation).to.be(225);
         } else {
-          expect(tank.position).to.eql(new Vector(margin - w/2, H - margin - h/2));
+          expect(tank.position).to.eql(new Vector(margin, H - margin));
           expect(tank.rotation).to.be(45);
         }
       }

@@ -31,7 +31,7 @@ describe('BulletManager', function() {
       expect(bulletManager.bullets).to.have.key('bullet id');
     });
 
-    it.skip('should make a bullet having proper position and rotation', function() {
+    it('should make a bullet having proper position and rotation', function() {
       var bullet = bulletManager.bullets['bullet id'];
       expect(bullet.position.x).to.be(bulletData.x);
       expect(bullet.position.y).to.be(bulletData.y);
