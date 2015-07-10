@@ -21,8 +21,8 @@ define(['js/Common', 'js/MySprite', 'js/Vector'], function(Common, MySprite, Vec
         var deltaTime = (currentTime - previousTime) / 1000;
         previousTime = currentTime;
 
-        var direction = Vector.unit(bullet.rotation-90);
-        var diff = direction.multiply(Common.bullet.speed * deltaTime);
+        var diff = Vector.polar(Common.bullet.speed * deltaTime,
+                                bullet.rotation - 90);
         bullet.moveBy(diff.x, diff.y);
 
         if (this.x < 0 || this.x > this.game.width ||

@@ -64,7 +64,7 @@ define(['js/Common', 'js/Vector', 'js/Tank'], function(Common, Vector, Tank) {
       } else if (this.game.input.a) {
         // fire bullet
         var rot = this.local.rotation;
-        var bulletPosition = new Vector(0, this.height/2).rotate(-rot);
+        var bulletPosition = Vector.polar(this.height / 2, rot - 90);
         bulletPosition = bulletPosition.add(this.local.position);
         this.bulletManager.addLocal(bulletPosition, rot, 0);
         this.coolingTime = Common.player.coolingTime;

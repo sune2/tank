@@ -30,7 +30,7 @@ define(function() {
   Vector.prototype.rotate = function(angle) {
     angle = angle * Math.PI / 180;
     return new Vector(Math.cos(angle) * this.x - Math.sin(angle) * this.y,
-                      Math.sin(angle) * this.x - Math.cos(angle) * this.y);
+                      Math.sin(angle) * this.x + Math.cos(angle) * this.y);
   };
 
   // inner product
@@ -47,6 +47,15 @@ define(function() {
     angle = angle * Math.PI / 180;
     return new Vector(Math.cos(angle), Math.sin(angle));
   };
+
+  // return the vector defined by its polar components
+  Vector.polar = function(rho, theta) {
+    theta = theta || 0;
+    theta = theta * Math.PI / 180;
+    return new Vector(rho * Math.cos(theta), rho * Math.sin(theta));
+  };
+
+
 
   return Vector;
 });
