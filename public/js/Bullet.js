@@ -1,14 +1,14 @@
-define(['js/Common', 'js/Vector'], function(Common, Vector) {
-  var Bullet = enchant.Class.create(enchant.Sprite, {
+define(['js/Common', 'js/MySprite', 'js/Vector'], function(Common, MySprite, Vector) {
+  var Bullet = enchant.Class.create(MySprite, {
     /*
      type : 0 (player's bullet)  1 (enemy's bullet)
      */
     initialize: function(game, id, position, rotation, type) {
-      enchant.Sprite.call(this, Common.bullet.width, Common.bullet.height);
+      MySprite.call(this, Common.bullet.width, Common.bullet.height);
       this.game = game;
       this.id = id;
-      this.x = position.x - this.width/2;
-      this.y = position.y - this.height/2;
+      this.x = position.x;
+      this.y = position.y;
       this.rotation = rotation;
       this.type = type;
 
@@ -25,17 +25,12 @@ define(['js/Common', 'js/Vector'], function(Common, Vector) {
         var diff = direction.multiply(Common.bullet.speed * deltaTime);
         bullet.moveBy(diff.x, diff.y);
 
-        var center = bullet.getCenter();
-        if (center.x < 0 || center.x > this.game.width ||
-            center.y < 0 || center.y > this.game.height) {
+        if (this.x < 0 || this.x > this.game.width ||
+            this.y < 0 || this.y > this.game.height) {
           // out of bounds
           bullet.remove();
         }
       });
-    },
-
-    getCenter: function() {
-      return new Vector(this.x + this.width / 2, this.y + this.height / 2);
     },
 
     remove: function() {

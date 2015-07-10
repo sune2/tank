@@ -1,7 +1,6 @@
 define(function() {
   var MySprite = enchant.Class.create(enchant.Sprite, {
     initialize: function(width, height) {
-      console.log(width, height);
       enchant.Sprite.call(this, width, height);
       this.x = 0;
       this.y = 0;
