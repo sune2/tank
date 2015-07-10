@@ -38,12 +38,6 @@ io.on('connection', function(socket) {
   // emit game state
   socket.emit('gameState', gameState);
 
-  socket.on('getTanks', function() {
-    for (var id in tankManager.tanks) {
-      socket.emit('tankAdded', id, tankManager.tanks[id].getData());
-    }
-  });
-
   socket.on('join', function(username) {
     console.log('joined : ' + username);
     if (gameState === 'title' && tankManager.canJoin()) {
@@ -52,6 +46,13 @@ io.on('connection', function(socket) {
       socket.broadcast.emit('tankAdded',  socket.id, tankData);
     } else {
       socket.emit('joinFailed');
+    }
+  });
+
+  socket.on('getTanks', function() {
+    console.log("getTanks");
+    for (var id in tankManager.tanks) {
+      socket.emit('tankAdded', id, tankManager.tanks[id].getData());
     }
   });
 
@@ -83,12 +84,6 @@ io.on('connection', function(socket) {
       io.emit('endGame');
       tankManager.setTitlePosition();
       gameState = 'title';
-    }
-  });
-
-  socket.on('returnTitle', function() {
-    for (var id in tankManager.tanks) {
-      socket.emit('tankAdded', id, tankManager.tanks[id].getData());
     }
   });
 

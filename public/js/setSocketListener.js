@@ -24,7 +24,7 @@ define(['js/TitleScene', 'js/GameScene'], function(TitleScene, GameScene) {
     socket.on('endGame', function() {
       var titleScene = new TitleScene(game, socket);
       game.replaceScene(titleScene);
-      socket.emit('returnTitle');
+      socket.emit('getTanks');
     });
 
     // tank
