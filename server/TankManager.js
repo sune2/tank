@@ -18,8 +18,7 @@ TankManager.prototype.canJoin = function() {
 TankManager.prototype.getTitlePositionX = function(idx) {
   var width = Common.screen.width;
   var margin = Common.title.margin;
-  var tankWidth = Common.tank.width;
-  var x = idx * margin + width / 2 - margin * 1.5 - tankWidth / 2;
+  var x = idx * margin + width / 2 - margin * 1.5;
   return x;
 };
 
@@ -69,23 +68,21 @@ TankManager.prototype.remove = function(socketId) {
 TankManager.prototype.setGamePosition = function() {
   var W = Common.screen.width;
   var H = Common.screen.height;
-  var w = Common.tank.width;
-  var h = Common.tank.height;
   var margin = Common.game.startPositionMargin;
   for (var id in this.tanks) {
     var tank = this.tanks[id];
     var idx = tank.idx;
     if (idx === 0) {
-      tank.position = new Vector(margin - w/2, margin - h/2);
+      tank.position = new Vector(margin, margin);
       tank.rotation = 135;
     } else if (idx === 1) {
-      tank.position = new Vector(W - margin - w/2, H - margin - h/2);
+      tank.position = new Vector(W - margin, H - margin);
       tank.rotation = 315;
     } else if (idx === 2) {
-      tank.position = new Vector(W - margin - w/2, margin - h/2);
+      tank.position = new Vector(W - margin, margin);
       tank.rotation = 225;
     } else {
-      tank.position = new Vector(margin - w/2, H - margin - h/2);
+      tank.position = new Vector(margin, H - margin);
       tank.rotation = 45;
     }
   }

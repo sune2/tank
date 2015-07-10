@@ -13,7 +13,7 @@ Tank.prototype.getSegments = function() {
   var ps = Common.tankVertices.map(function(pointArray) {
     // 回転
     var p = new Vector(pointArray[0], pointArray[1]);
-    return p.subtract(center).rotate(rot).add(center).add(pos);
+    return p.subtract(center).rotate(rot).add(pos);
   });
 
   var n = ps.length;
