@@ -1,7 +1,7 @@
-define(['js/Common'], function(Common) {
-  var HPBar = enchant.Class.create(enchant.Sprite, {
+define(['js/Common', 'js/MySprite'], function(Common, MySprite) {
+  var HPBar = enchant.Class.create(MySprite, {
     initialize: function(maxHP) {
-      enchant.Sprite.call(this, Common.tank.hpBar.width, Common.tank.hpBar.height);
+      MySprite.call(this, Common.tank.hpBar.width, Common.tank.hpBar.height);
       this.surface = new enchant.Surface(this.width, this.height);
       this.image = this.surface;
       this.maxHP = maxHP;

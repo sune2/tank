@@ -1,4 +1,4 @@
-define(['js/Common', 'js/HPBar', 'js/NameBar' , 'js/Effect'], function(Common, HPBar, NameBar, Effect) {
+define(['js/Common', 'js/MySprite','js/HPBar', 'js/NameBar' , 'js/Effect'], function(Common, MySprite, HPBar, NameBar, Effect) {
   var Tank = enchant.Class.create(enchant.Group, {
     initialize: function(game, x, y, tankRotation, bulletManager, tankInfo) {
       enchant.Group.call(this);
@@ -11,21 +11,19 @@ define(['js/Common', 'js/HPBar', 'js/NameBar' , 'js/Effect'], function(Common, H
       this.maxHP = Common.tank.maxHP;
 
       // tank sprite
-      this.tankSprite = new enchant.Sprite(this.width, this.height);
-      this.tankSprite.x = 0;
-      this.tankSprite.y = 0;
+      this.tankSprite = new MySprite(this.width, this.height);
       this.addChild(this.tankSprite);
 
       // hp bar
       this.hpBar = new HPBar(this.maxHP);
-      this.hpBar.myOffSetX = this.width / 2 - this.hpBar.width / 2;
-      this.hpBar.myOffSetY = Common.tank.hpBar.offsetY;
+      this.hpBar.offsetX = 0;
+      this.hpBar.offsetY = Common.tank.hpBar.offsetY;
       this.tankInfo.addChild(this.hpBar);
 
       // name bar
       this.nameBar = new NameBar();
-      this.nameBar.myOffSetX = this.width / 2;
-      this.nameBar.myOffSetY = Common.tank.nameBar.offsetY;
+      this.nameBar.offsetX = 0;
+      this.nameBar.offsetY = Common.tank.nameBar.offsetY;
       this.tankInfo.addChild(this.nameBar);
 
       this.x = x;
@@ -57,8 +55,8 @@ define(['js/Common', 'js/HPBar', 'js/NameBar' , 'js/Effect'], function(Common, H
       },
       set: function(x) {
         this._x = x;
-        this.hpBar.x = x + this.hpBar.myOffSetX;
-        this.nameBar.x = x + this.nameBar.myOffSetX;
+        this.hpBar.x = x + this.hpBar.offsetX;
+        this.nameBar.x = x + this.nameBar.offsetX;
         this._dirty = true;
       }
     },
@@ -69,8 +67,8 @@ define(['js/Common', 'js/HPBar', 'js/NameBar' , 'js/Effect'], function(Common, H
       },
       set: function(y) {
         this._y = y;
-        this.hpBar.y = y + this.hpBar.myOffSetY;
-        this.nameBar.y = y + this.nameBar.myOffSetY;
+        this.hpBar.y = y + this.hpBar.offsetY;
+        this.nameBar.y = y + this.nameBar.offsetY;
         this._dirty = true;
       }
     },

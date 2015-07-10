@@ -7,8 +7,7 @@ define(['js/Common', 'js/Vector', 'js/Tank'], function(Common, Vector, Tank) {
 
       // ローカルでの状態
       this.local = {
-        x: this.x,
-        y: this.y,
+        position: new Vector(this.x, this.y),
         rotation: this.tankRotation
       };
 
@@ -50,14 +49,13 @@ define(['js/Common', 'js/Vector', 'js/Tank'], function(Common, Vector, Tank) {
         var direction = Vector.unit(this.local.rotation-90);
         var diff = direction.multiply(Common.player.speed * deltaTime);
         if (this.canMove(diff)) {
-          this.local.x += diff.x;
-          this.local.y += diff.y;
+          this.local.position = this.local.position.add(diff);
           moveOrRotated = true;
         }
       }
 
       if (moveOrRotated) {
-        this.socket.emit('tankMoved', {x: this.local.x, y: this.local.y, rotation: this.local.rotation});
+        this.socket.emit('tankMoved', {x: this.local.position.x, y: this.local.position.y, rotation: this.local.rotation});
       }
 
       // for bullet
@@ -66,22 +64,15 @@ define(['js/Common', 'js/Vector', 'js/Tank'], function(Common, Vector, Tank) {
       } else if (this.game.input.a) {
         // fire bullet
         var rot = this.local.rotation;
-        var center = this.getLocalCenter();
         var bulletPosition = new Vector(0, this.height/2).rotate(-rot);
-        bulletPosition = bulletPosition.add(center);
+        bulletPosition = bulletPosition.add(this.local.position);
         this.bulletManager.addLocal(bulletPosition, rot, 0);
         this.coolingTime = Common.player.coolingTime;
       }
     },
 
-    getLocalCenter: function() {
-      var x = this.local.x + this.width/2;
-      var y = this.local.y + this.height/2;
-      return new Vector(x, y);
-    },
-
     canMove: function(diff) {
-      var pos = this.getLocalCenter().add(diff);
+      var pos = this.local.position.add(diff);
       return (0 < pos.x && pos.x < this.game.width &&
               0 < pos.y && pos.y < this.game.height);
     }

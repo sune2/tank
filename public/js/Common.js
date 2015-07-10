@@ -11,11 +11,11 @@ define([], function() {
       hpBar: {
         width: 28,
         height: 5,
-        offsetY: -15
+        offsetY: -31
       },
       nameBar: {
         fontSize: 10,
-        offsetY: 40
+        offsetY: 26
       },
       deadImageName: '/images/dead.png'
     },
